@@ -1,0 +1,584 @@
+// ~->[DNET-1]->~
+
+// File created by NaschenK at UBonn using Netica 6.09 on Dec 14, 2021 at 01:46:18 UTC.
+
+bnet NewBBNwith17Nodes {
+AutoCompile = TRUE;
+autoupdate = TRUE;
+whenchanged = 1639446371;
+
+visual V3 {
+	defdispform = BELIEFBARS;
+	nodelabeling = TITLE;
+	NodeMaxNumEntries = 50;
+	nodefont = font {shape= "CMU Sans Serif"; size= 16;};
+	linkfont = font {shape= "Arial"; size= 9;};
+	ShowLinkStrengths = 1;
+	windowposn = (0, 0, 1668, 874);
+	scrollposn = (0, 135);
+	resolution = 72;
+	magnification = 0.741508;
+	drawingbounds = (3683, 1967);
+	showpagebreaks = FALSE;
+	usegrid = TRUE;
+	gridspace = (6, 6);
+	NodeSet Node {BuiltIn = 1; Color = 0x00008000;};
+	NodeSet Nature {BuiltIn = 1; Color = 0x00ffffff;};
+	NodeSet Deterministic {BuiltIn = 1; Color = 0x00d3caa6;};
+	NodeSet Finding {BuiltIn = 1; Color = 0x00c8c8c8;};
+	NodeSet Constant {BuiltIn = 1; Color = 0x00ffffff;};
+	NodeSet ConstantValue {BuiltIn = 1; Color = 0x00ffffb4;};
+	NodeSet Utility {BuiltIn = 1; Color = 0x00ffbdbd;};
+	NodeSet Decision {BuiltIn = 1; Color = 0x00dee8ff;};
+	NodeSet Documentation {BuiltIn = 1; Color = 0x00f0fafa;};
+	NodeSet Title {BuiltIn = 1; Color = 0x00ffffff;};
+	NodeSet farmersdecisions {Color = 0x000080ff;};
+	NodeSet TargetNode {Color = 0x00ff8040;};
+	PrinterSetting A {
+		margins = (508, 508, 508, 508);
+		landscape = TRUE;
+		};
+	};
+
+node intensificationStrategies {
+	discrete = TRUE;
+	states = (None, CropMultipleTimes, ApplyFertilizer, ApplyImprovedSeed, UseIrrigationAndFertilizerAppl, UseIrrigation, Other);
+	statetitles = (, , , , "UseIrrigationAndFertilizerApplication", , );
+	levels = (0, 1, 2, 3, 4, 5, 0);
+	kind = NATURE;
+	chance = CHANCE;
+	parents = ();
+	probs = 
+		// None         CropMultipleTime ApplyFertilizer ApplyImprovedSee UseIrrigationAnd UseIrrigation Other 
+		  (0.6151316,   0.08223684,  0.07236842,  0.1184211,   0.06907894,  0.03947368,  0.003289474);
+	numcases = 304;
+	title = "ChoiceOfIntensificationStrategy";
+	whenchanged = 1639446367;
+	belief = (0.735871, 0.07123961, 0.05642176, 0.04734695, 0.04488095, 0.04103401, 0.003205782);
+	visual V3 {
+		center = (984, 1044);
+		height = 1;
+		};
+	};
+
+node topgraphicWetnessIndex {
+	discrete = FALSE;
+	states = (Between14And18, Between18And23, Between23And32);
+	levels = (14.3, 17.9, 23, 32);
+	kind = NATURE;
+	chance = CHANCE;
+	parents = (intensificationStrategies);
+	probs = 
+		// Between14And18 Between18And23 Between23And32  // intensificationStrategies 
+		  (0.3227513,   0.3597884,   0.3174603,    // None                      
+		   0.2592593,   0.3703704,   0.3703704,    // CropMultipleTime          
+		   0.5833333,   0.2083333,   0.2083333,    // ApplyFertilizer           
+		   0.3421053,   0.2631579,   0.3947369,    // ApplyImprovedSee          
+		   0.3043478,   0.2608696,   0.4347826,    // UseIrrigationAnd          
+		   0.4285714,   0.2142857,   0.3571429,    // UseIrrigation             
+		   0.3333333,   0.3333333,   0.3333333);   // Other                     ;
+	numcases = 
+		                 // intensificationStrategies 
+		  (189,          // None                      
+		   27,           // CropMultipleTime          
+		   24,           // ApplyFertilizer           
+		   38,           // ApplyImprovedSee          
+		   23,           // UseIrrigationAnd          
+		   14,           // UseIrrigation             
+		   3);           // Other                     ;
+	title = "TopgraphicWetnessIndex";
+	whenchanged = 1639446367;
+	belief = (0.3373972, 0.3369268, 0.325676);
+	visual V3 {
+		center = (954, 144);
+		height = 5;
+		};
+	};
+
+node ageOfTheHouseholdHead {
+	discrete = FALSE;
+	states = (between_24And35, between_35and45, between_45And55, Above_55);
+	levels = (24, 35, 45, 55, INFINITY);
+	kind = NATURE;
+	chance = CHANCE;
+	parents = (intensificationStrategies);
+	probs = 
+		// between 24And35 between 35and45 between 45And55 Above 55  // intensificationStrategies 
+		  (0.1631579,   0.3263158,   0.2789474,   0.2315789,    // None                      
+		   0.2142857,   0.2142857,   0.25,        0.3214286,    // CropMultipleTime          
+		   0.24,        0.28,        0.36,        0.12,         // ApplyFertilizer           
+		   0.1538462,   0.3846154,   0.1538462,   0.3076923,    // ApplyImprovedSee          
+		   0.1666667,   0.3333333,   0.3333333,   0.1666667,    // UseIrrigationAnd          
+		   0.06666667,  0.2666667,   0.3333333,   0.3333333,    // UseIrrigation             
+		   0.25,        0.25,        0.25,        0.25);        // Other                     ;
+	numcases = 
+		                 // intensificationStrategies 
+		  (190,          // None                      
+		   28,           // CropMultipleTime          
+		   25,           // ApplyFertilizer           
+		   39,           // ApplyImprovedSee          
+		   24,           // UseIrrigationAnd          
+		   15,           // UseIrrigation             
+		   4);           // Other                     ;
+	whenchanged = 1639446367;
+	belief = (0.1671713, 0.3161046, 0.2801149, 0.2366092);
+	visual V3 {
+		center = (204, 498);
+		height = 15;
+		};
+	};
+
+node cropChoice {
+	discrete = TRUE;
+	states = (RiceAndMaize, RiceMaizeAndVegit, Rice, VegitAndMaize, VegitAndRice, Maize, Vegitables);
+	kind = NATURE;
+	chance = CHANCE;
+	parents = (intensificationStrategies);
+	probs = 
+		// RiceAndMaize RiceMaizeAndVegi Rice     VegitAndMaize VegitAndRice Maize       Vegitables    // intensificationStrategies 
+		  (0.3160622,   0.03108808,  0.5595855,   0.005181347, 0.06217616,  0.02072539,  0.005181347,  // None                      
+		   0.516129,    0.1290323,   0.09677419,  0.03225806,  0.09677419,  0.09677419,  0.03225806,   // CropMultipleTime          
+		   0.3571429,   0.1428571,   0.25,        0.07142857,  0.1071429,   0.03571429,  0.03571429,   // ApplyFertilizer           
+		   0.3333333,   0.0952381,   0.4285714,   0.02380952,  0.07142857,  0.02380952,  0.02380952,   // ApplyImprovedSee          
+		   0.1111111,   0.2222222,   0.2962963,   0.03703704,  0.2222222,   0.03703704,  0.07407407,   // UseIrrigationAnd          
+		   0.1111111,   0.1111111,   0.5555556,   0.05555556,  0.05555556,  0.05555556,  0.05555556,   // UseIrrigation             
+		   0.1428571,   0.1428571,   0.1428571,   0.1428571,   0.1428571,   0.1428571,   0.1428571);   // Other                     ;
+	numcases = 
+		                 // intensificationStrategies 
+		  (193,          // None                      
+		   31,           // CropMultipleTime          
+		   28,           // ApplyFertilizer           
+		   42,           // ApplyImprovedSee          
+		   27,           // UseIrrigationAnd          
+		   18,           // UseIrrigation             
+		   7);           // Other                     ;
+	title = "CropChoice";
+	whenchanged = 1639446367;
+	belief = (0.3152868, 0.05962935, 0.4896266, 0.01566818, 0.07478607, 0.02968763, 0.01531538);
+	visual V3 {
+		center = (222, 798);
+		height = 14;
+		};
+	};
+
+node farmType {
+	discrete = TRUE;
+	states = (Subsistence, Diversifier, AgroPastoralist);
+	kind = NATURE;
+	chance = CHANCE;
+	parents = (intensificationStrategies);
+	probs = 
+		// Subsistence  Diversifier  AgroPastoralist  // intensificationStrategies 
+		  (0.6878307,   0.2063492,   0.1058201,    // None                      
+		   0.3333333,   0.6296296,   0.03703704,   // CropMultipleTime          
+		   0.625,       0.2916667,   0.08333334,   // ApplyFertilizer           
+		   0.6315789,   0.3157895,   0.05263158,   // ApplyImprovedSee          
+		   0.5652174,   0.3913043,   0.04347826,   // UseIrrigationAnd          
+		   0.7142857,   0.2142857,   0.07142857,   // UseIrrigation             
+		   0.3333333,   0.3333333,   0.3333333);   // Other                     ;
+	numcases = 
+		                 // intensificationStrategies 
+		  (189,          // None                      
+		   27,           // CropMultipleTime          
+		   24,           // ApplyFertilizer           
+		   38,           // ApplyImprovedSee          
+		   23,           // UseIrrigationAnd          
+		   14,           // UseIrrigation             
+		   3);           // Other                     ;
+	title = "FarmerType";
+	whenchanged = 1639446367;
+	belief = (0.6508142, 0.2555327, 0.09365314);
+	visual V3 {
+		center = (192, 1020);
+		height = 13;
+		};
+	};
+
+node farmSize {
+	discrete = FALSE;
+	states = (LessThan_3Ha, Between_3And6Ha, Between_6And9Ha, MoreThan_9Ha);
+	levels = (0, 3, 6, 9, 21.5);
+	kind = NATURE;
+	chance = CHANCE;
+	parents = (intensificationStrategies);
+	probs = 
+		// LessThan 3Ha Between 3And6Ha Between 6And9Ha MoreThan 9Ha  // intensificationStrategies 
+		  (0.7105263,   0.1631579,   0.07894737,  0.04736842,   // None                      
+		   0.7857143,   0.1428571,   0.03571429,  0.03571429,   // CropMultipleTime          
+		   0.64,        0.2,         0.08,        0.08,         // ApplyFertilizer           
+		   0.6410257,   0.2307692,   0.05128205,  0.07692308,   // ApplyImprovedSee          
+		   0.6666667,   0.2083333,   0.08333334,  0.04166667,   // UseIrrigationAnd          
+		   0.6,         0.2666667,   0.06666667,  0.06666667,   // UseIrrigation             
+		   0.25,        0.25,        0.25,        0.25);        // Other                     ;
+	numcases = 
+		                 // intensificationStrategies 
+		  (190,          // None                      
+		   28,           // CropMultipleTime          
+		   25,           // ApplyFertilizer           
+		   39,           // ApplyImprovedSee          
+		   24,           // UseIrrigationAnd          
+		   15,           // UseIrrigation             
+		   4);           // Other                     ;
+	title = "SizeOfCropLand";
+	whenchanged = 1639446367;
+	belief = (0.7006326, 0.1735449, 0.07485826, 0.05096422);
+	visual V3 {
+		center = (240, 1272);
+		height = 12;
+		};
+	};
+
+node distanceToBigMarket {
+	discrete = FALSE;
+	states = (LessThan15Km, Between15And30Km, Above30Km);
+	levels = (1, 14, 24, 64);
+	kind = NATURE;
+	chance = CHANCE;
+	parents = (intensificationStrategies);
+	probs = 
+		// LessThan15Km Between15And30Km Above30Km  // intensificationStrategies 
+		  (0.3544973,   0.2645503,   0.3809524,    // None                      
+		   0.3333333,   0.2222222,   0.4444444,    // CropMultipleTime          
+		   0.2916667,   0.4166667,   0.2916667,    // ApplyFertilizer           
+		   0.2368421,   0.4473684,   0.3157895,    // ApplyImprovedSee          
+		   0.3913043,   0.4782609,   0.1304348,    // UseIrrigationAnd          
+		   0.2857143,   0.6428571,   0.07142857,   // UseIrrigation             
+		   0.3333333,   0.3333333,   0.3333333);   // Other                     ;
+	numcases = 
+		                 // intensificationStrategies 
+		  (189,          // None                      
+		   27,           // CropMultipleTime          
+		   24,           // ApplyFertilizer           
+		   38,           // ApplyImprovedSee          
+		   23,           // UseIrrigationAnd          
+		   14,           // UseIrrigation             
+		   3);           // Other                     ;
+	title = "DistanceToBigMarket";
+	whenchanged = 1639446367;
+	belief = (0.3426356, 0.3041089, 0.3532555);
+	visual V3 {
+		center = (1350, 144);
+		height = 6;
+		};
+	};
+
+node percentNonfarmIncome {
+	discrete = FALSE;
+	states = (None, LessThan30Perc, MoreThan30Perc);
+	levels = (0, 0, 30, 92);
+	kind = NATURE;
+	chance = CHANCE;
+	parents = (intensificationStrategies);
+	probs = 
+		// None         LessThan30Perc MoreThan30Perc  // intensificationStrategies 
+		  (0.7407407,   0.1375661,   0.1216931,    // None                      
+		   0.5925926,   0.2962963,   0.1111111,    // CropMultipleTime          
+		   0.5416667,   0.25,        0.2083333,    // ApplyFertilizer           
+		   0.6315789,   0.2894737,   0.07894737,   // ApplyImprovedSee          
+		   0.6956522,   0.173913,    0.1304348,    // UseIrrigationAnd          
+		   0.8571429,   0.07142857,  0.07142857,   // UseIrrigation             
+		   0.3333333,   0.3333333,   0.3333333);   // Other                     ;
+	numcases = 
+		                 // intensificationStrategies 
+		  (189,          // None                      
+		   27,           // CropMultipleTime          
+		   24,           // ApplyFertilizer           
+		   38,           // ApplyImprovedSee          
+		   23,           // UseIrrigationAnd          
+		   14,           // UseIrrigation             
+		   3);           // Other                     ;
+	title = "PercentOfNonFarmIncome";
+	whenchanged = 1639446367;
+	belief = (0.7152329, 0.1619551, 0.122812);
+	visual V3 {
+		center = (1980, 942);
+		height = 9;
+		};
+	};
+
+node totalLaborManDays {
+	discrete = FALSE;
+	states = (lessThan_120, Between_120And220, Between_220And400, MoreThan_400);
+	levels = (10, 120, 220, 400, 2760);
+	kind = NATURE;
+	chance = CHANCE;
+	parents = (intensificationStrategies);
+	probs = 
+		// lessThan 120 Between 120And22 Between 220And40 MoreThan 400  // intensificationStrategies 
+		  (0.2578947,   0.2789474,   0.2210526,   0.2421053,    // None                      
+		   0.1428571,   0.2142857,   0.2857143,   0.3571429,    // CropMultipleTime          
+		   0.12,        0.32,        0.28,        0.28,         // ApplyFertilizer           
+		   0.2307692,   0.2564103,   0.3076923,   0.2051282,    // ApplyImprovedSee          
+		   0.25,        0.2083333,   0.2083333,   0.3333333,    // UseIrrigationAnd          
+		   0.3333333,   0.2,         0.2666667,   0.2,          // UseIrrigation             
+		   0.25,        0.25,        0.25,        0.25);        // Other                     ;
+	numcases = 
+		                 // intensificationStrategies 
+		  (190,          // None                      
+		   28,           // CropMultipleTime          
+		   25,           // ApplyFertilizer           
+		   39,           // ApplyImprovedSee          
+		   24,           // UseIrrigationAnd          
+		   15,           // UseIrrigation             
+		   4);           // Other                     ;
+	title = "LabourInManDays";
+	whenchanged = 1639446367;
+	belief = (0.2433508, 0.2690886, 0.2344808, 0.2530798);
+	visual V3 {
+		center = (1608, 1176);
+		height = 2;
+		};
+	};
+
+node shareOfHiredLabour {
+	discrete = FALSE;
+	states = (LessThan_10Percent, Between_10And60Percent, Above_60Percent);
+	levels = (0, 10, 60, 100);
+	kind = NATURE;
+	chance = CHANCE;
+	parents = (intensificationStrategies);
+	probs = 
+		// LessThan 10Perce Between 10And60P Above 60Percent  // intensificationStrategies 
+		  (0.3862434,   0.3544973,   0.2592593,    // None                      
+		   0.4444444,   0.3333333,   0.2222222,    // CropMultipleTime          
+		   0.2083333,   0.4166667,   0.375,        // ApplyFertilizer           
+		   0.2631579,   0.3421053,   0.3947369,    // ApplyImprovedSee          
+		   0.2608696,   0.2173913,   0.5217391,    // UseIrrigationAnd          
+		   0.5,         0.2142857,   0.2857143,    // UseIrrigation             
+		   0.3333333,   0.3333333,   0.3333333);   // Other                     ;
+	numcases = 
+		                 // intensificationStrategies 
+		  (189,          // None                      
+		   27,           // CropMultipleTime          
+		   24,           // ApplyFertilizer           
+		   38,           // ApplyImprovedSee          
+		   23,           // UseIrrigationAnd          
+		   14,           // UseIrrigation             
+		   3);           // Other                     ;
+	title = "ShareOfHiredLabour";
+	whenchanged = 1639446367;
+	belief = (0.3733953, 0.3439359, 0.2826689);
+	visual V3 {
+		center = (1092, 1386);
+		height = 10;
+		};
+	};
+
+node householdSize {
+	discrete = FALSE;
+	states = (LessThan4_, Between_4And7, MoreThan_7);
+	levels = (1, 4, 7, 11);
+	kind = NATURE;
+	chance = CHANCE;
+	parents = (intensificationStrategies);
+	probs = 
+		// LessThan4    Between 4And7 MoreThan 7   // intensificationStrategies 
+		  (0.1957672,   0.5661376,   0.2380952,    // None                      
+		   0.3703704,   0.4444444,   0.1851852,    // CropMultipleTime          
+		   0.2916667,   0.5416667,   0.1666667,    // ApplyFertilizer           
+		   0.3157895,   0.5526316,   0.131579,     // ApplyImprovedSee          
+		   0.1304348,   0.6521739,   0.2173913,    // UseIrrigationAnd          
+		   0.3571429,   0.5,         0.1428571,    // UseIrrigation             
+		   0.3333333,   0.3333333,   0.3333333);   // Other                     ;
+	numcases = 
+		                 // intensificationStrategies 
+		  (189,          // None                      
+		   27,           // CropMultipleTime          
+		   24,           // ApplyFertilizer           
+		   38,           // ApplyImprovedSee          
+		   23,           // UseIrrigationAnd          
+		   14,           // UseIrrigation             
+		   3);           // Other                     ;
+	title = "SizeOfHousehold";
+	whenchanged = 1639446367;
+	belief = (0.2234301, 0.5558492, 0.2207207);
+	visual V3 {
+		center = (654, 1386);
+		height = 11;
+		};
+	};
+
+node commercializationIndex {
+	discrete = FALSE;
+	states = (LessThan_30Percent, Between_30And60Percent, MoreThan_60Percent);
+	levels = (0, 30, 60, 100);
+	kind = NATURE;
+	chance = CHANCE;
+	parents = (intensificationStrategies);
+	probs = 
+		// LessThan 30Perce Between 30And60P MoreThan 60Perce  // intensificationStrategies 
+		  (0.3015873,   0.3703704,   0.3280423,    // None                      
+		   0.2962963,   0.5185185,   0.1851852,    // CropMultipleTime          
+		   0.04166667,  0.5,         0.4583333,    // ApplyFertilizer           
+		   0.1842105,   0.4736842,   0.3421053,    // ApplyImprovedSee          
+		   0.2173913,   0.3478261,   0.4347826,    // UseIrrigationAnd          
+		   0.2142857,   0.5,         0.2857143,    // UseIrrigation             
+		   0.3333333,   0.3333333,   0.3333333);   // Other                     ;
+	numcases = 
+		                 // intensificationStrategies 
+		  (189,          // None                      
+		   27,           // CropMultipleTime          
+		   24,           // ApplyFertilizer           
+		   38,           // ApplyImprovedSee          
+		   23,           // UseIrrigationAnd          
+		   14,           // UseIrrigation             
+		   3);           // Other                     ;
+	title = "CommercializationIndex";
+	whenchanged = 1639446367;
+	belief = (0.2737284, 0.3973186, 0.328953);
+	visual V3 {
+		center = (1812, 144);
+		height = 7;
+		};
+	};
+
+node ricePrice {
+	discrete = FALSE;
+	levels = (0, 1138, 1230, 1250, 1860);
+	kind = NATURE;
+	chance = CHANCE;
+	parents = (intensificationStrategies);
+	probs = 
+		// 0 to 1138    1138 to 1230 1230 to 1250 1250 to 1860  // intensificationStrategies 
+		  (0.1842105,   0.2789474,   0.2578947,   0.2789474,    // None                      
+		   0.1071429,   0.3571429,   0.25,        0.2857143,    // CropMultipleTime          
+		   0.16,        0.44,        0.12,        0.28,         // ApplyFertilizer           
+		   0.1025641,   0.4358974,   0.3333333,   0.1282051,    // ApplyImprovedSee          
+		   0.08333334,  0.2916667,   0.5416667,   0.08333334,   // UseIrrigationAnd          
+		   0.06666667,  0.2666667,   0.3333333,   0.3333333,    // UseIrrigation             
+		   0.25,        0.25,        0.25,        0.25);        // Other                     ;
+	numcases = 
+		                 // intensificationStrategies 
+		  (190,          // None                      
+		   28,           // CropMultipleTime          
+		   25,           // ApplyFertilizer           
+		   39,           // ApplyImprovedSee          
+		   24,           // UseIrrigationAnd          
+		   15,           // UseIrrigation             
+		   4);           // Other                     ;
+	whenchanged = 1639446367;
+	belief = (0.1643487, 0.3010101, 0.26893, 0.2657112);
+	visual V3 {
+		center = (570, 156);
+		height = 3;
+		};
+	};
+
+node creditaccess {
+	discrete = TRUE;
+	states = (No, Yes);
+	kind = NATURE;
+	chance = CHANCE;
+	parents = (intensificationStrategies);
+	probs = 
+		// No           Yes           // intensificationStrategies 
+		  (0.6968085,   0.3031915,    // None                      
+		   0.5384616,   0.4615385,    // CropMultipleTime          
+		   0.4782609,   0.5217391,    // ApplyFertilizer           
+		   0.6486486,   0.3513514,    // ApplyImprovedSee          
+		   0.6818182,   0.3181818,    // UseIrrigationAnd          
+		   0.7692308,   0.2307692,    // UseIrrigation             
+		   0.5,         0.5);         // Other                     ;
+	numcases = 
+		                 // intensificationStrategies 
+		  (188,          // None                      
+		   26,           // CropMultipleTime          
+		   23,           // ApplyFertilizer           
+		   37,           // ApplyImprovedSee          
+		   22,           // UseIrrigationAnd          
+		   13,           // UseIrrigation             
+		   2);           // Other                     ;
+	whenchanged = 1639446367;
+	belief = (0.672585, 0.3274151);
+	visual V3 {
+		center = (228, 114);
+		height = 4;
+		};
+	};
+
+node maizePrice {
+	discrete = FALSE;
+	levels = (0, 0, 800, 890, 1120);
+	kind = NATURE;
+	chance = CHANCE;
+	parents = (intensificationStrategies);
+	probs = 
+		// 0            0 to 800     800 to 890   890 to 1120   // intensificationStrategies 
+		  (0.5684211,   0.1473684,   0.1789474,   0.1052632,    // None                      
+		   0.1071429,   0.25,        0.3571429,   0.2857143,    // CropMultipleTime          
+		   0.36,        0.32,        0.2,         0.12,         // ApplyFertilizer           
+		   0.4871795,   0.1538462,   0.2051282,   0.1538462,    // ApplyImprovedSee          
+		   0.5833333,   0.1666667,   0.08333334,  0.1666667,    // UseIrrigationAnd          
+		   0.6,         0.2,         0.06666667,  0.1333333,    // UseIrrigation             
+		   0.25,        0.25,        0.25,        0.25);        // Other                     ;
+	numcases = 
+		                 // intensificationStrategies 
+		  (190,          // None                      
+		   28,           // CropMultipleTime          
+		   25,           // ApplyFertilizer           
+		   39,           // ApplyImprovedSee          
+		   24,           // UseIrrigationAnd          
+		   15,           // UseIrrigation             
+		   4);           // Other                     ;
+	whenchanged = 1639446367;
+	belief = (0.520898, 0.1680815, 0.1853986, 0.1256218);
+	visual V3 {
+		center = (1968, 414);
+		height = 8;
+		};
+	};
+
+node perCapitaIncome {
+	discrete = FALSE;
+	levels = (0, 160000, 280000, 600000, 15800000);
+	kind = NATURE;
+	chance = CHANCE;
+	parents = (intensificationStrategies);
+	probs = 
+		// 0 to 1.6e5   1.6e5 to 2.8e5 2.8e5 to 6e5 6e5 to 1.58e7  // intensificationStrategies 
+		  (0.3068783,   0.2592593,   0.2380952,   0.1957672,    // None                      
+		   0.2222222,   0.1851852,   0.3703704,   0.2222222,    // CropMultipleTime          
+		   0.2,         0.16,        0.28,        0.36,         // ApplyFertilizer           
+		   0.1025641,   0.2564103,   0.3076923,   0.3333333,    // ApplyImprovedSee          
+		   0.1666667,   0.2916667,   0.1666667,   0.375,        // UseIrrigationAnd          
+		   0.2666667,   0.2,         0.2666667,   0.2666667,    // UseIrrigation             
+		   0.25,        0.25,        0.25,        0.25);        // Other                     ;
+	numcases = 
+		                 // intensificationStrategies 
+		  (189,          // None                      
+		   27,           // CropMultipleTime          
+		   25,           // ApplyFertilizer           
+		   39,           // ApplyImprovedSee          
+		   24,           // UseIrrigationAnd          
+		   15,           // UseIrrigation             
+		   4);           // Other                     ;
+	whenchanged = 1639446371;
+	evidence = #0;
+	belief = (1, 0, 0, 0);
+	visual V3 {
+		center = (1944, 690);
+		height = 17;
+		};
+	};
+
+node IfHireLabour {
+	discrete = TRUE;
+	states = (Yes, No);
+	kind = NATURE;
+	chance = CHANCE;
+	parents = ();
+	probs = 
+		// Yes          No           
+		  (0.9464883,   0.05351171);
+	numcases = 299;
+	whenchanged = 1639446367;
+	belief = (0.9464883, 0.05351171);
+	visual V3 {
+		center = (2256, 70);
+		height = 16;
+		};
+	};
+NodeSet farmersdecisions {Nodes = (intensificationStrategies, cropChoice);};
+NodeSet TargetNode {Nodes = (intensificationStrategies);};
+ElimOrder = (IfHireLabour, creditaccess, topgraphicWetnessIndex, farmType, distanceToBigMarket, percentNonfarmIncome, shareOfHiredLabour, householdSize, commercializationIndex, ageOfTheHouseholdHead, farmSize, totalLaborManDays, ricePrice, maizePrice, perCapitaIncome, intensificationStrategies, cropChoice);
+};
