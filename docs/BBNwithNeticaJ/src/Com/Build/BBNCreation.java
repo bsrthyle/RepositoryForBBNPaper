@@ -18,7 +18,7 @@ public class BBNCreation {
     public static void main(String[] args)
     {
         try {
-            Environ environ = new Environ("+HeckleiT/UBonn/310-7-A/1303");
+            Environ environ = new Environ(null);
             net = new Net(new Streamer(orginalBBNNFileName));
             NodeList nodes = net.getNodes();
             Node intensificationStrategy = net.getNode("intensificationStrategies");

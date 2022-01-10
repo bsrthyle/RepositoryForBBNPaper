@@ -53,7 +53,7 @@ public class DesignOfExperment {
 
         try {
 
-            Environ environ = new Environ("+HeckleiT/UBonn/310-7-A/1303");
+            Environ environ = new Environ(null);
             myNet = new Net(new Streamer("FinalBBN5.dne"));
         } catch (NeticaException e2) {
 
