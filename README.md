@@ -36,7 +36,7 @@ We conducted a household survey in 21 villages in two Districts of the Kilombero
 
   - <a href="./Data/">Data</a>
   - <a href="./Data/SurveyInstrument_Tanzania.pdf"> Questionnaire</a>
-  - <a href="https://bsrthyle.github.io/FarmTypolgyV5/"> Descriptive statistics</a>
+  - <a href="./docs/CharacterizingFarmers_3.html"> Descriptive statistics</a>
 
 # <a id="java-code"></a> Java-Code 
 
