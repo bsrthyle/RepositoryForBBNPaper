@@ -1,0 +1,852 @@
+// ~->[DNET-1]->~
+
+// File created by NaschenK at UBonn using Netica 6.09 on Dec 13, 2021 at 12:01:47 UTC.
+
+bnet NewBBNwith17Nodes {
+AutoCompile = TRUE;
+autoupdate = TRUE;
+whenchanged = 1639396605;
+
+visual V3 {
+	defdispform = BELIEFBARS;
+	nodelabeling = TITLE;
+	NodeMaxNumEntries = 50;
+	nodefont = font {shape= "CMU Sans Serif"; size= 16;};
+	linkfont = font {shape= "Arial"; size= 9;};
+	ShowLinkStrengths = 1;
+	windowposn = (0, 0, 1668, 874);
+	scrollposn = (0, 202);
+	resolution = 72;
+	magnification = 0.741508;
+	drawingbounds = (3683, 1967);
+	showpagebreaks = FALSE;
+	usegrid = TRUE;
+	gridspace = (6, 6);
+	NodeSet Node {BuiltIn = 1; Color = 0x00008000;};
+	NodeSet Nature {BuiltIn = 1; Color = 0x00ffffff;};
+	NodeSet Deterministic {BuiltIn = 1; Color = 0x00d3caa6;};
+	NodeSet Finding {BuiltIn = 1; Color = 0x00c8c8c8;};
+	NodeSet Constant {BuiltIn = 1; Color = 0x00ffffff;};
+	NodeSet ConstantValue {BuiltIn = 1; Color = 0x00ffffb4;};
+	NodeSet Utility {BuiltIn = 1; Color = 0x00ffbdbd;};
+	NodeSet Decision {BuiltIn = 1; Color = 0x00dee8ff;};
+	NodeSet Documentation {BuiltIn = 1; Color = 0x00f0fafa;};
+	NodeSet Title {BuiltIn = 1; Color = 0x00ffffff;};
+	NodeSet farmersdecisions {Color = 0x000080ff;};
+	NodeSet TargetNode {Color = 0x00ff8040;};
+	PrinterSetting A {
+		margins = (508, 508, 508, 508);
+		landscape = TRUE;
+		};
+	};
+
+node intensificationStrategies {
+	discrete = TRUE;
+	states = (None, CropMultipleTimes, ApplyFertilizer, ApplyImprovedSeed, UseIrrigationAndFertilizerAppl, UseIrrigation, Other);
+	statetitles = (, , , , "UseIrrigationAndFertilizerApplication", , );
+	levels = (0, 1, 2, 3, 4, 5, 0);
+	kind = NATURE;
+	chance = CHANCE;
+	parents = ();
+	probs = 
+		// None         CropMultipleTime ApplyFertilizer ApplyImprovedSee UseIrrigationAnd UseIrrigation Other 
+		  (0.6133333,   0.08,        0.07333333,  0.12,        0.07,        0.04,        0.003333333);
+	numcases = 300;
+	title = "ChoiceOfIntensificationStrategy";
+	whenchanged = 1639396564;
+	belief = (0.6133333, 0.08, 0.07333334, 0.12, 0.07, 0.04, 0.003333334);
+	visual V3 {
+		center = (984, 1044);
+		height = 1;
+		};
+	};
+
+node householdSize {
+	discrete = FALSE;
+	states = (LessThan4_, Between_4And7, MoreThan_7);
+	levels = (1, 4, 7, 11);
+	kind = NATURE;
+	chance = CHANCE;
+	parents = (intensificationStrategies);
+	probs = 
+		// LessThan4    Between 4And7 MoreThan 7   // intensificationStrategies 
+		  (0.1912564,   0.5297133,   0.2790304,    // None                      
+		   0.3087933,   0.5405143,   0.1506924,    // CropMultipleTime          
+		   0.2500535,   0.60652,     0.1434265,    // ApplyFertilizer           
+		   0.3483494,   0.5327193,   0.1189313,    // ApplyImprovedSee          
+		   0.1108425,   0.6688166,   0.2203409,    // UseIrrigationAnd          
+		   0.3338436,   0.5778478,   0.08830866,   // UseIrrigation             
+		   0.3519921,   0.359127,    0.2888809);   // Other                     ;
+	title = "SizeOfHousehold";
+	whenchanged = 1639396473;
+	belief = (0.2244326, 0.5476645, 0.2279029);
+	visual V3 {
+		center = (684, 1410);
+		height = 11;
+		};
+	};
+
+node ageOfTheHouseholdHead {
+	discrete = FALSE;
+	states = (between_24And35, between_35and45, between_45And55, Above_55);
+	levels = (24, 35, 45, 55, INFINITY);
+	kind = NATURE;
+	chance = CHANCE;
+	parents = (intensificationStrategies);
+	probs = 
+		// between 24And35 between 35and45 between 45And55 Above 55  // intensificationStrategies 
+		  (0.1816797,   0.3030794,   0.2925141,   0.2227268,    // None                      
+		   0.1999992,   0.2196226,   0.2438514,   0.3365268,    // CropMultipleTime          
+		   0.2592446,   0.2633098,   0.3814176,   0.09602799,   // ApplyFertilizer           
+		   0.1446788,   0.3875006,   0.1296507,   0.33817,      // ApplyImprovedSee          
+		   0.1422908,   0.3632824,   0.3226665,   0.1717603,    // UseIrrigationAnd          
+		   0.002564813, 0.2252019,   0.3816659,   0.3905674,    // UseIrrigation             
+		   0.2251725,   0.2837073,   0.2784781,   0.2126421);   // Other                     ;
+	whenchanged = 1639396473;
+	belief = (0.1746164, 0.3046515, 0.281227, 0.2395051);
+	visual V3 {
+		center = (288, 642);
+		height = 3;
+		link 1 {
+			path = ((720, 1002), (540, 1002), (540, 642), (471, 642));
+			};
+		};
+	};
+
+node distanceToBigMarket {
+	discrete = FALSE;
+	states = (LessThan15Km, Between15And30Km, Above30Km);
+	levels = (1, 14, 24, 64);
+	kind = NATURE;
+	chance = CHANCE;
+	parents = (intensificationStrategies);
+	probs = 
+		// LessThan15Km Between15And30Km Above30Km  // intensificationStrategies 
+		  (0.3253419,   0.2768784,   0.3977797,    // None                      
+		   0.2671603,   0.2576656,   0.475174,     // CropMultipleTime          
+		   0.2521688,   0.4900984,   0.2577328,    // ApplyFertilizer           
+		   0.2155554,   0.5189346,   0.26551,      // ApplyImprovedSee          
+		   0.3620498,   0.5422719,   0.09567836,   // UseIrrigationAnd          
+		   0.3111105,   0.6824611,   0.006428481,  // UseIrrigation             
+		   0.3031285,   0.378215,    0.3186565);   // Other                     ;
+	title = "DistanceToBigMarket";
+	whenchanged = 1639396473;
+	belief = (0.3040732, 0.3551629, 0.3407639);
+	visual V3 {
+		center = (1356, 648);
+		height = 7;
+		};
+	};
+
+node topgraphicWetnessIndex {
+	discrete = FALSE;
+	states = (Between14And18, Between18And23, Between23And32);
+	levels = (14.3, 17.9, 23, 32);
+	kind = NATURE;
+	chance = CHANCE;
+	parents = (intensificationStrategies);
+	probs = 
+		// Between14And18 Between18And23 Between23And32  // intensificationStrategies 
+		  (0.2956076,   0.3870309,   0.3173615,    // None                      
+		   0.306854,    0.3826597,   0.3104863,    // CropMultipleTime          
+		   0.6535267,   0.1821321,   0.1643411,    // ApplyFertilizer           
+		   0.3020276,   0.2748816,   0.4230908,    // ApplyImprovedSee          
+		   0.2596666,   0.2703237,   0.4700097,    // UseIrrigationAnd          
+		   0.4141615,   0.1850437,   0.4007949,    // UseIrrigation             
+		   0.3547068,   0.3241408,   0.3211523);   // Other                     ;
+	title = "TopgraphicWetnessIndex";
+	whenchanged = 1639396473;
+	belief = (0.3259484, 0.3417387, 0.3323128);
+	visual V3 {
+		center = (900, 648);
+		height = 2;
+		link 1 {
+			path = ((984, 917), (984, 720));
+			};
+		};
+	};
+
+node cropChoice {
+	discrete = TRUE;
+	states = (RiceAndMaize, RiceMaizeAndVegit, Rice, VegitAndMaize, VegitAndRice, Maize, Vegitables);
+	kind = NATURE;
+	chance = CHANCE;
+	parents = (intensificationStrategies, ageOfTheHouseholdHead, topgraphicWetnessIndex);
+	probs = 
+		// RiceAndMaize RiceMaizeAndVegi Rice     VegitAndMaize VegitAndRice Maize       Vegitables    // intensificationStrategies ageOfTheHouseholdHead topgraphicWetnessIndex 
+		  (0.2371747,   0.007649886, 0.6190965,   0.007636749, 0.1136099,   0.007372309, 0.00746,      // None                      between 24And35       Between14And18         
+		   0.1320917,   0.007402276, 0.8323361,   0.006934499, 0.007146396, 0.006868484, 0.00722061,   // None                      between 24And35       Between18And23         
+		   0.3126934,   0.006181459, 0.657393,    0.005790947, 0.006155975, 0.005884834, 0.005900411,  // None                      between 24And35       Between23And32         
+		   0.4421704,   0.05291801,  0.2759,      0.006944647, 0.1076092,   0.1075136,   0.006943927,  // None                      between 35and45       Between14And18         
+		   0.3507517,   0.005859422, 0.6197899,   0.005898854, 0.005944032, 0.005834875, 0.005921178,  // None                      between 35and45       Between18And23         
+		   0.1158518,   0.009849437, 0.7739511,   0.01002423,  0.0704409,   0.009879478, 0.01000315,   // None                      between 35and45       Between23And32         
+		   0.4629649,   0.005900803, 0.3971251,   0.005955845, 0.06105965,  0.06103783,  0.005955892,  // None                      between 45And55       Between14And18         
+		   0.3056012,   0.05260964,  0.6145116,   0.006720388, 0.006966096, 0.006747695, 0.006843308,  // None                      between 45And55       Between18And23         
+		   0.3303632,   0.005821211, 0.6399873,   0.006049945, 0.006001288, 0.00575667,  0.006020316,  // None                      between 45And55       Between23And32         
+		   0.492453,    0.1053316,   0.217427,    0.00747211,  0.1623691,   0.007454506, 0.007492739,  // None                      Above 55              Between14And18         
+		   0.1671387,   0.05010617,  0.6469191,   0.00867187,  0.109687,    0.008709838, 0.00876737,   // None                      Above 55              Between18And23         
+		   0.4170232,   0.004296851, 0.5613332,   0.004178672, 0.004438559, 0.004346056, 0.004383478,  // None                      Above 55              Between23And32         
+		   0.1630415,   0.1331783,   0.1325603,   0.1278367,   0.1576114,   0.1551313,   0.1306404,    // CropMultipleTime          between 24And35       Between14And18         
+		   0.9859962,   0.002343259, 0.002393868, 0.002298242, 0.00235736,  0.002288797, 0.00232229,   // CropMultipleTime          between 24And35       Between18And23         
+		   0.7287939,   0.007671055, 0.007704739, 0.007783535, 0.007483591, 0.2328247,   0.007738493,  // CropMultipleTime          between 24And35       Between23And32         
+		   0.002595961, 0.002810021, 0.9839301,   0.00284885,  0.002595667, 0.002660311, 0.002559132,  // CropMultipleTime          between 35and45       Between14And18         
+		   0.004313434, 0.00449748,  0.4894058,   0.004314077, 0.4885851,   0.004469219, 0.004414905,  // CropMultipleTime          between 35and45       Between18And23         
+		   0.4864362,   0.4878123,   0.0051086,   0.005219269, 0.005039538, 0.005213136, 0.005170987,  // CropMultipleTime          between 35and45       Between23And32         
+		   0.488742,    0.004560276, 0.004531437, 0.004644422, 0.004568553, 0.4884951,   0.00445827,   // CropMultipleTime          between 45And55       Between14And18         
+		   0.7331529,   0.2345317,   0.00666401,  0.006511386, 0.006273073, 0.006474608, 0.006392365,  // CropMultipleTime          between 45And55       Between18And23         
+		   0.1535783,   0.1647043,   0.1351456,   0.126747,    0.1552208,   0.1305557,   0.1340484,    // CropMultipleTime          between 45And55       Between23And32         
+		   0.9836145,   0.002888048, 0.002864764, 0.002658186, 0.002663292, 0.002583732, 0.00272746,   // CropMultipleTime          Above 55              Between14And18         
+		   0.9871791,   0.002015085, 0.002191243, 0.00221814,  0.002150975, 0.002203297, 0.002042137,  // CropMultipleTime          Above 55              Between18And23         
+		   0.4900452,   0.48805,     0.004413812, 0.004333669, 0.004326602, 0.004387499, 0.004443141,  // CropMultipleTime          Above 55              Between23And32         
+		   0.002749241, 0.002923648, 0.983091,    0.002824936, 0.002652397, 0.002841868, 0.002916932,  // ApplyFertilizer           between 24And35       Between14And18         
+		   0.002115682, 0.002257975, 0.9870614,   0.002025909, 0.002064018, 0.002259431, 0.002215557,  // ApplyFertilizer           between 24And35       Between18And23         
+		   0.4875146,   0.004591427, 0.4891167,   0.004744167, 0.004655678, 0.004730011, 0.004647351,  // ApplyFertilizer           between 24And35       Between23And32         
+		   0.7831562,   0.007356635, 0.007267273, 0.007614033, 0.1800458,   0.007153813, 0.007406262,  // ApplyFertilizer           between 35and45       Between14And18         
+		   0.1422382,   0.1399083,   0.1453482,   0.1416562,   0.1428331,   0.1409434,   0.1470726,    // ApplyFertilizer           between 35and45       Between18And23         
+		   0.9841599,   0.002650749, 0.002685815, 0.002697645, 0.00260701,  0.00261894,  0.002579931,  // ApplyFertilizer           between 35and45       Between23And32         
+		   0.3992482,   0.194568,    0.1946535,   0.005642308, 0.194562,    0.005670129, 0.005655898,  // ApplyFertilizer           between 45And55       Between14And18         
+		   0.489624,    0.4895443,   0.004105428, 0.004159134, 0.00423175,  0.00425793,  0.004077455,  // ApplyFertilizer           between 45And55       Between18And23         
+		   0.002713364, 0.002903446, 0.9831985,   0.002751454, 0.002653681, 0.002904646, 0.002874905,  // ApplyFertilizer           between 45And55       Between23And32         
+		   0.004315687, 0.489233,    0.004250488, 0.489125,    0.004364933, 0.004264515, 0.004446345,  // ApplyFertilizer           Above 55              Between14And18         
+		   0.1512593,   0.1488258,   0.1441398,   0.1606115,   0.1231426,   0.128043,    0.143978,     // ApplyFertilizer           Above 55              Between18And23         
+		   0.1281327,   0.1650232,   0.1508551,   0.1488705,   0.1278848,   0.1521266,   0.1271072,    // ApplyFertilizer           Above 55              Between23And32         
+		   0.004440225, 0.004388413, 0.4895566,   0.004338449, 0.4882854,   0.004522146, 0.004468813,  // ApplyImprovedSee          between 24And35       Between14And18         
+		   0.9874574,   0.002023629, 0.002037439, 0.002008417, 0.002176791, 0.002234598, 0.002061701,  // ApplyImprovedSee          between 24And35       Between18And23         
+		   0.4894959,   0.004544917, 0.4877145,   0.004607176, 0.004598266, 0.00448219,  0.004557,     // ApplyImprovedSee          between 24And35       Between23And32         
+		   0.1826316,   0.006958363, 0.782503,    0.006920941, 0.007139155, 0.006874664, 0.006972255,  // ApplyImprovedSee          between 35and45       Between14And18         
+		   0.3140126,   0.005816472, 0.6574578,   0.005574742, 0.005652059, 0.005822198, 0.00566415,   // ApplyImprovedSee          between 35and45       Between18And23         
+		   0.1436566,   0.007437105, 0.8186108,   0.007725152, 0.007525474, 0.007306285, 0.007738555,  // ApplyImprovedSee          between 35and45       Between23And32         
+		   0.1378573,   0.1279225,   0.1366121,   0.1490807,   0.1646329,   0.1640318,   0.1198628,    // ApplyImprovedSee          between 45And55       Between14And18         
+		   0.4875228,   0.004476961, 0.4893099,   0.004732045, 0.004610926, 0.004702381, 0.004644956,  // ApplyImprovedSee          between 45And55       Between18And23         
+		   0.656819,    0.005941346, 0.006338066, 0.006251274, 0.3123882,   0.006056943, 0.006205237,  // ApplyImprovedSee          between 45And55       Between23And32         
+		   0.3931193,   0.3920859,   0.1920324,   0.005696184, 0.005679752, 0.005676693, 0.005709814,  // ApplyImprovedSee          Above 55              Between14And18         
+		   0.3280759,   0.3282596,   0.3283385,   0.003841604, 0.00383209,  0.00381917,  0.003833157,  // ApplyImprovedSee          Above 55              Between18And23         
+		   0.656593,    0.006175085, 0.3123324,   0.006214835, 0.006260504, 0.006239221, 0.00618494,   // ApplyImprovedSee          Above 55              Between23And32         
+		   0.004904969, 0.3265441,   0.004897555, 0.004905435, 0.3269303,   0.004870175, 0.3269475,    // UseIrrigationAnd          between 24And35       Between14And18         
+		   0.1266131,   0.1403564,   0.1382691,   0.1643812,   0.1455253,   0.1362828,   0.1485721,    // UseIrrigationAnd          between 24And35       Between18And23         
+		   0.1416358,   0.1475945,   0.1216904,   0.1288687,   0.1256752,   0.1711263,   0.1634091,    // UseIrrigationAnd          between 24And35       Between23And32         
+		   0.164084,    0.1291228,   0.1580457,   0.1256669,   0.1207612,   0.1648817,   0.1374377,    // UseIrrigationAnd          between 35and45       Between14And18         
+		   0.00658136,  0.2350027,   0.731742,    0.006754475, 0.006722894, 0.006553973, 0.006642669,  // UseIrrigationAnd          between 35and45       Between18And23         
+		   0.3123466,   0.006200901, 0.6566824,   0.006253107, 0.006208574, 0.006263806, 0.006044584,  // UseIrrigationAnd          between 35and45       Between23And32         
+		   0.4873578,   0.004691896, 0.004588105, 0.004687578, 0.4892096,   0.004635798, 0.004829246,  // UseIrrigationAnd          between 45And55       Between14And18         
+		   0.002542672, 0.9847775,   0.002563666, 0.002436985, 0.002551576, 0.002562063, 0.002565531,  // UseIrrigationAnd          between 45And55       Between18And23         
+		   0.005823231, 0.4904481,   0.2429975,   0.005898512, 0.2430765,   0.005857691, 0.00589847,   // UseIrrigationAnd          between 45And55       Between23And32         
+		   0.002335346, 0.00246849,  0.00244433,  0.002406,    0.9853226,   0.002512867, 0.002510369,  // UseIrrigationAnd          Above 55              Between14And18         
+		   0.1327038,   0.1596533,   0.1606433,   0.1612746,   0.1242102,   0.1446593,   0.1168555,    // UseIrrigationAnd          Above 55              Between18And23         
+		   0.004596192, 0.004597091, 0.487103,    0.004553013, 0.4900326,   0.004536054, 0.004582081,  // UseIrrigationAnd          Above 55              Between23And32         
+		   0.1656316,   0.1622148,   0.1309841,   0.1317489,   0.1519831,   0.1342074,   0.1232301,    // UseIrrigation             between 24And35       Between14And18         
+		   0.1390384,   0.1472213,   0.1509487,   0.1464251,   0.1324553,   0.1564083,   0.1275031,    // UseIrrigation             between 24And35       Between18And23         
+		   0.1289539,   0.1287265,   0.1342767,   0.1542032,   0.1372217,   0.1607514,   0.1558666,    // UseIrrigation             between 24And35       Between23And32         
+		   0.001894314, 0.001888342, 0.9887693,   0.001851791, 0.001849394, 0.001836817, 0.00191005,   // UseIrrigation             between 35and45       Between14And18         
+		   0.1260857,   0.1610234,   0.1338707,   0.134481,    0.1290578,   0.1600396,   0.1554418,    // UseIrrigation             between 35and45       Between18And23         
+		   0.002300055, 0.002384366, 0.9857221,   0.00244807,  0.002290169, 0.002486645, 0.002368548,  // UseIrrigation             between 35and45       Between23And32         
+		   0.002283154, 0.00228492,  0.9863167,   0.002330514, 0.002315672, 0.002172387, 0.002296684,  // UseIrrigation             between 45And55       Between14And18         
+		   0.002718146, 0.002787231, 0.9840745,   0.002554422, 0.002581112, 0.002607045, 0.00267755,   // UseIrrigation             between 45And55       Between18And23         
+		   0.002675245, 0.002759802, 0.9835403,   0.002752009, 0.002706262, 0.00268672,  0.002879647,  // UseIrrigation             between 45And55       Between23And32         
+		   0.00571757,  0.313742,    0.6573542,   0.005841366, 0.005681575, 0.005934254, 0.005728962,  // UseIrrigation             Above 55              Between14And18         
+		   0.1393371,   0.1346739,   0.14318,     0.1588543,   0.144678,    0.1336369,   0.1456397,    // UseIrrigation             Above 55              Between18And23         
+		   0.9835811,   0.002699585, 0.002711946, 0.002792268, 0.002719082, 0.002667,    0.00282903,   // UseIrrigation             Above 55              Between23And32         
+		   0.1315163,   0.1372244,   0.1336578,   0.1541462,   0.148503,    0.1476967,   0.1472557,    // Other                     between 24And35       Between14And18         
+		   0.1120866,   0.1365902,   0.1546329,   0.1366,      0.1486596,   0.1555535,   0.1558773,    // Other                     between 24And35       Between18And23         
+		   0.1201653,   0.1595569,   0.1444422,   0.1281324,   0.1479897,   0.1447459,   0.1549675,    // Other                     between 24And35       Between23And32         
+		   0.1337384,   0.1311865,   0.140722,    0.1665934,   0.1538457,   0.1182774,   0.1556365,    // Other                     between 35and45       Between14And18         
+		   0.1393346,   0.1243824,   0.1328769,   0.1459584,   0.1545631,   0.1527212,   0.1501634,    // Other                     between 35and45       Between18And23         
+		   0.1449894,   0.1277185,   0.1493482,   0.1661954,   0.1241901,   0.1215883,   0.1659701,    // Other                     between 35and45       Between23And32         
+		   0.1549659,   0.1548455,   0.1284156,   0.1431179,   0.1261858,   0.1679621,   0.1245073,    // Other                     between 45And55       Between14And18         
+		   0.1565326,   0.1559274,   0.1454639,   0.1549886,   0.1251525,   0.1343626,   0.1275725,    // Other                     between 45And55       Between18And23         
+		   0.1211,      0.1561621,   0.1417609,   0.1260869,   0.1264554,   0.1614531,   0.1669814,    // Other                     between 45And55       Between23And32         
+		   0.1457914,   0.1305005,   0.1439808,   0.1641613,   0.1640369,   0.1238741,   0.127655,     // Other                     Above 55              Between14And18         
+		   0.1310147,   0.1378661,   0.1506062,   0.1226365,   0.164526,    0.167278,    0.1260724,    // Other                     Above 55              Between18And23         
+		   0.1500424,   0.1240821,   0.1641987,   0.1645199,   0.1400637,   0.1196908,   0.1374025);   // Other                     Above 55              Between23And32         ;
+	title = "CropChoice";
+	whenchanged = 1639396473;
+	belief = (0.3235899, 0.06486132, 0.4932659, 0.01466784, 0.06506051, 0.02532401, 0.01323055);
+	visual V3 {
+		center = (294, 888);
+		height = 4;
+		link 2 {
+			path = ((294, 726), (294, 777));
+			};
+		link 3 {
+			path = ((900, 723), (900, 888), (490, 888));
+			};
+		};
+	};
+
+node farmType {
+	discrete = TRUE;
+	states = (Subsistence, Diversifier, AgroPastoralist);
+	kind = NATURE;
+	chance = CHANCE;
+	parents = (intensificationStrategies, cropChoice);
+	probs = 
+		// Subsistence  Diversifier  AgroPastoralist  // intensificationStrategies cropChoice       
+		  (0.3553802,   0.4451818,   0.199438,     // None                      RiceAndMaize     
+		   0.1865138,   0.6363291,   0.1771571,    // None                      RiceMaizeAndVegi 
+		   0.9465636,   0.01032274,  0.04311368,   // None                      Rice             
+		   0.3078319,   0.3427946,   0.3493735,    // None                      VegitAndMaize    
+		   0.5934935,   0.3112254,   0.0952812,    // None                      VegitAndRice     
+		   0.001018057, 0.9979612,   0.001020777,  // None                      Maize            
+		   0.3569144,   0.340481,    0.3026046,    // None                      Vegitables       
+		   0.3745039,   0.6186857,   0.006810443,  // CropMultipleTime          RiceAndMaize     
+		   8.494224e-4, 0.9983005,   8.500768e-4,  // CropMultipleTime          RiceMaizeAndVegi 
+		   0.9979684,   0.001019751, 0.001011805,  // CropMultipleTime          Rice             
+		   0.360105,    0.2747844,   0.3651106,    // CropMultipleTime          VegitAndMaize    
+		   0.9980028,   9.95527e-4,  0.001001618,  // CropMultipleTime          VegitAndRice     
+		   0.001225816, 0.9975395,   0.001234679,  // CropMultipleTime          Maize            
+		   0.3550395,   0.3381197,   0.3068408,    // CropMultipleTime          Vegitables       
+		   0.6393195,   0.2422347,   0.1184458,    // ApplyFertilizer           RiceAndMaize     
+		   0.3712332,   0.625816,    0.002950814,  // ApplyFertilizer           RiceMaizeAndVegi 
+		   0.9982906,   8.530558e-4, 8.563492e-4,  // ApplyFertilizer           Rice             
+		   8.847173e-4, 0.9982263,   8.889949e-4,  // ApplyFertilizer           VegitAndMaize    
+		   0.538183,    0.4593062,   0.002510825,  // ApplyFertilizer           VegitAndRice     
+		   0.3337494,   0.3055418,   0.3607087,    // ApplyFertilizer           Maize            
+		   0.325016,    0.3816506,   0.2933334,    // ApplyFertilizer           Vegitables       
+		   0.501169,    0.4953833,   0.003447719,  // ApplyImprovedSee          RiceAndMaize     
+		   0.3751132,   0.6179359,   0.006950881,  // ApplyImprovedSee          RiceMaizeAndVegi 
+		   0.9390648,   0.003302928, 0.05763227,   // ApplyImprovedSee          Rice             
+		   0.3555495,   0.3099068,   0.3345437,    // ApplyImprovedSee          VegitAndMaize    
+		   9.710393e-4, 0.998063,    9.659202e-4,  // ApplyImprovedSee          VegitAndRice     
+		   0.336576,    0.3290506,   0.3343734,    // ApplyImprovedSee          Maize            
+		   0.3397783,   0.3716756,   0.288546,     // ApplyImprovedSee          Vegitables       
+		   0.001024437, 0.9979422,   0.001033336,  // UseIrrigationAnd          RiceAndMaize     
+		   9.803823e-4, 0.9980377,   9.819245e-4,  // UseIrrigationAnd          RiceMaizeAndVegi 
+		   0.9977024,   0.001151963, 0.001145692,  // UseIrrigationAnd          Rice             
+		   0.3337161,   0.3514948,   0.3147891,    // UseIrrigationAnd          VegitAndMaize    
+		   0.9973517,   0.001318868, 0.00132945,   // UseIrrigationAnd          VegitAndRice     
+		   0.3675382,   0.3645311,   0.2679307,    // UseIrrigationAnd          Maize            
+		   0.001302106, 0.9973974,   0.001300473,  // UseIrrigationAnd          Vegitables       
+		   9.802871e-4, 0.9980337,   9.860185e-4,  // UseIrrigation             RiceAndMaize     
+		   9.997331e-4, 0.9980016,   9.986898e-4,  // UseIrrigation             RiceMaizeAndVegi 
+		   0.9977375,   0.001133008, 0.001129439,  // UseIrrigation             Rice             
+		   0.3695069,   0.3398051,   0.290688,     // UseIrrigation             VegitAndMaize    
+		   0.2806852,   0.3529508,   0.366364,     // UseIrrigation             VegitAndRice     
+		   0.2910305,   0.3391602,   0.3698093,    // UseIrrigation             Maize            
+		   0.3460209,   0.333073,    0.320906,     // UseIrrigation             Vegitables       
+		   0.385154,    0.3007773,   0.3140687,    // Other                     RiceAndMaize     
+		   0.3007103,   0.3153681,   0.3839215,    // Other                     RiceMaizeAndVegi 
+		   0.3979483,   0.3153661,   0.2866855,    // Other                     Rice             
+		   0.2946,      0.3255535,   0.3798467,    // Other                     VegitAndMaize    
+		   0.3001775,   0.3920618,   0.3077607,    // Other                     VegitAndRice     
+		   0.3165487,   0.3719471,   0.3115041,    // Other                     Maize            
+		   0.3914426,   0.3252158,   0.2833417);   // Other                     Vegitables       ;
+	title = "FarmerType";
+	whenchanged = 1639396473;
+	belief = (0.6563899, 0.2675173, 0.07609279);
+	visual V3 {
+		center = (282, 1158);
+		height = 5;
+		link 2 {
+			path = ((282, 1002), (282, 1099));
+			};
+		};
+	};
+
+node farmSize {
+	discrete = FALSE;
+	states = (LessThan_3Ha, Between_3And6Ha, Between_6And9Ha, MoreThan_9Ha);
+	levels = (0, 3, 6, 9, 21.5);
+	kind = NATURE;
+	chance = CHANCE;
+	parents = (intensificationStrategies, farmType);
+	probs = 
+		// LessThan 3Ha Between 3And6Ha Between 6And9Ha MoreThan 9Ha  // intensificationStrategies farmType        
+		  (0.8234184,   0.1643466,   0.007399164, 0.004835818,  // None                      Subsistence     
+		   0.6786487,   0.211915,    0.08123996,  0.02819636,   // None                      Diversifier     
+		   0.003570062, 0.00360525,  0.6118346,   0.3809901,    // None                      AgroPastoralist 
+		   0.7405569,   0.2495231,   0.004961355, 0.004958631,  // CropMultipleTime          Subsistence     
+		   0.9272906,   0.06368111,  0.004518316, 0.004509986,  // CropMultipleTime          Diversifier     
+		   0.2325637,   0.2448027,   0.2837122,   0.2389214,    // CropMultipleTime          AgroPastoralist 
+		   0.8561242,   0.1327694,   0.005555871, 0.005550505,  // ApplyFertilizer           Subsistence     
+		   0.5302058,   0.3104349,   0.15515,     0.004209196,  // ApplyFertilizer           Diversifier     
+		   0.001722184, 0.001729724, 0.001725572, 0.9948225,    // ApplyFertilizer           AgroPastoralist 
+		   0.7307336,   0.1895482,   0.03985674,  0.03986139,   // ApplyImprovedSee          Subsistence     
+		   0.7173556,   0.2723672,   0.00514043,  0.005136803,  // ApplyImprovedSee          Diversifier     
+		   0.00145935,  0.001427207, 0.001459606, 0.9956538,    // ApplyImprovedSee          AgroPastoralist 
+		   0.6755822,   0.3148936,   0.004743594, 0.004780687,  // UseIrrigationAnd          Subsistence     
+		   0.8735662,   0.005515089, 0.1154024,   0.00551639,   // UseIrrigationAnd          Diversifier     
+		   0.2320116,   0.2629907,   0.2242588,   0.2807389,    // UseIrrigationAnd          AgroPastoralist 
+		   0.7698326,   0.220787,    0.004684388, 0.004696083,  // UseIrrigation             Subsistence     
+		   0.5124224,   0.4792036,   0.004201229, 0.004172673,  // UseIrrigation             Diversifier     
+		   0.2743123,   0.2459577,   0.2553613,   0.2243687,    // UseIrrigation             AgroPastoralist 
+		   0.2812444,   0.2116421,   0.2589079,   0.2482056,    // Other                     Subsistence     
+		   0.2379062,   0.2583719,   0.2445695,   0.2591524,    // Other                     Diversifier     
+		   0.2597504,   0.2650736,   0.2454554,   0.2297206);   // Other                     AgroPastoralist ;
+	title = "SizeOfCropLand";
+	whenchanged = 1639396473;
+	belief = (0.7209165, 0.1705847, 0.06420488, 0.04429385);
+	visual V3 {
+		center = (288, 1386);
+		height = 6;
+		link 1 {
+			path = ((713, 1107), (576, 1140), (391, 1298));
+			};
+		link 2 {
+			path = ((288, 1224), (288, 1298));
+			};
+		};
+	};
+
+node shareOfHiredLabour {
+	discrete = FALSE;
+	states = (LessThan_10Percent, Between_10And60Percent, Above_60Percent);
+	levels = (0, 10, 60, 100);
+	kind = NATURE;
+	chance = CHANCE;
+	parents = (intensificationStrategies, farmSize, householdSize);
+	probs = 
+		// LessThan 10Perce Between 10And60P Above 60Percent  // intensificationStrategies farmSize        householdSize 
+		  (0.3029273,   0.5324695,   0.1646032,    // None                      LessThan 3Ha    LessThan4     
+		   0.3778422,   0.368826,    0.2533318,    // None                      LessThan 3Ha    Between 4And7 
+		   0.4687203,   0.3547671,   0.1765126,    // None                      LessThan 3Ha    MoreThan 7    
+		   0.288591,    0.004427659, 0.7069814,    // None                      Between 3And6Ha LessThan4     
+		   0.3166888,   0.3077814,   0.3755297,    // None                      Between 3And6Ha Between 4And7 
+		   0.3901227,   0.3359057,   0.2739716,    // None                      Between 3And6Ha MoreThan 7    
+		   0.3232239,   0.3485658,   0.3282102,    // None                      Between 6And9Ha LessThan4     
+		   0.9979212,   0.001037758, 0.001041046,  // None                      Between 6And9Ha Between 4And7 
+		   0.7990872,   0.1961339,   0.004778946,  // None                      Between 6And9Ha MoreThan 7    
+		   9.512255e-4, 0.998093,    9.557859e-4,  // None                      MoreThan 9Ha    LessThan4     
+		   0.333136,    0.318442,    0.3484221,    // None                      MoreThan 9Ha    Between 4And7 
+		   0.1547183,   0.387997,    0.4572847,    // None                      MoreThan 9Ha    MoreThan 7    
+		   0.533242,    0.1306056,   0.3361524,    // CropMultipleTime          LessThan 3Ha    LessThan4     
+		   0.2805125,   0.6090158,   0.1104717,    // CropMultipleTime          LessThan 3Ha    Between 4And7 
+		   0.6990479,   0.2957982,   0.005153941,  // CropMultipleTime          LessThan 3Ha    MoreThan 7    
+		   0.2924024,   0.3740892,   0.3335084,    // CropMultipleTime          Between 3And6Ha LessThan4     
+		   0.002618334, 0.464683,    0.5326987,    // CropMultipleTime          Between 3And6Ha Between 4And7 
+		   0.9981331,   9.334539e-4, 9.334135e-4,  // CropMultipleTime          Between 3And6Ha MoreThan 7    
+		   0.4014897,   0.2982749,   0.3002354,    // CropMultipleTime          Between 6And9Ha LessThan4     
+		   0.3268553,   0.3333624,   0.3397824,    // CropMultipleTime          Between 6And9Ha Between 4And7 
+		   0.3115328,   0.333433,    0.3550342,    // CropMultipleTime          Between 6And9Ha MoreThan 7    
+		   0.3238115,   0.3318193,   0.3443692,    // CropMultipleTime          MoreThan 9Ha    LessThan4     
+		   0.3744014,   0.3199622,   0.3056364,    // CropMultipleTime          MoreThan 9Ha    Between 4And7 
+		   0.2989399,   0.3426848,   0.3583753,    // CropMultipleTime          MoreThan 9Ha    MoreThan 7    
+		   0.1782388,   0.4563489,   0.3654124,    // ApplyFertilizer           LessThan 3Ha    LessThan4     
+		   0.480424,    0.2427915,   0.2767845,    // ApplyFertilizer           LessThan 3Ha    Between 4And7 
+		   0.00329853,  0.4850152,   0.5116863,    // ApplyFertilizer           LessThan 3Ha    MoreThan 7    
+		   0.3410689,   0.323317,    0.3356141,    // ApplyFertilizer           Between 3And6Ha LessThan4     
+		   0.005784166, 0.3009741,   0.6932418,    // ApplyFertilizer           Between 3And6Ha Between 4And7 
+		   0.001201867, 0.9975985,   0.001199584,  // ApplyFertilizer           Between 3And6Ha MoreThan 7    
+		   0.3668516,   0.3362579,   0.2968905,    // ApplyFertilizer           Between 6And9Ha LessThan4     
+		   8.895297e-4, 0.9982277,   8.827976e-4,  // ApplyFertilizer           Between 6And9Ha Between 4And7 
+		   0.3286595,   0.3107744,   0.3605661,    // ApplyFertilizer           Between 6And9Ha MoreThan 7    
+		   0.3798936,   0.3277894,   0.292317,     // ApplyFertilizer           MoreThan 9Ha    LessThan4     
+		   0.00117109,  0.001173767, 0.9976552,    // ApplyFertilizer           MoreThan 9Ha    Between 4And7 
+		   0.2782835,   0.3693418,   0.3523747,    // ApplyFertilizer           MoreThan 9Ha    MoreThan 7    
+		   0.1613536,   0.08843863,  0.7502077,    // ApplyImprovedSee          LessThan 3Ha    LessThan4     
+		   0.3958621,   0.4384972,   0.1656408,    // ApplyImprovedSee          LessThan 3Ha    Between 4And7 
+		   0.3496099,   0.6459934,   0.004396678,  // ApplyImprovedSee          LessThan 3Ha    MoreThan 7    
+		   0.3429265,   0.3369491,   0.3201244,    // ApplyImprovedSee          Between 3And6Ha LessThan4     
+		   0.1557539,   0.3129504,   0.5312957,    // ApplyImprovedSee          Between 3And6Ha Between 4And7 
+		   0.001262466, 0.9974821,   0.001255393,  // ApplyImprovedSee          Between 3And6Ha MoreThan 7    
+		   0.3568214,   0.3133131,   0.3298655,    // ApplyImprovedSee          Between 6And9Ha LessThan4     
+		   0.9982914,   8.557682e-4, 8.528295e-4,  // ApplyImprovedSee          Between 6And9Ha Between 4And7 
+		   0.3562386,   0.3203821,   0.3233793,    // ApplyImprovedSee          Between 6And9Ha MoreThan 7    
+		   0.001007213, 0.00100876,  0.9979841,    // ApplyImprovedSee          MoreThan 9Ha    LessThan4     
+		   0.001101197, 0.9977903,   0.001108504,  // ApplyImprovedSee          MoreThan 9Ha    Between 4And7 
+		   0.3727961,   0.2964811,   0.3307228,    // ApplyImprovedSee          MoreThan 9Ha    MoreThan 7    
+		   0.9974189,   0.001285681, 0.001295461,  // UseIrrigationAnd          LessThan 3Ha    LessThan4     
+		   0.2979022,   0.004299851, 0.697798,     // UseIrrigationAnd          LessThan 3Ha    Between 4And7 
+		   0.004921214, 0.5001211,   0.4949577,    // UseIrrigationAnd          LessThan 3Ha    MoreThan 7    
+		   0.001179111, 0.001171862, 0.997649,     // UseIrrigationAnd          Between 3And6Ha LessThan4     
+		   0.002396378, 0.5068054,   0.4907982,    // UseIrrigationAnd          Between 3And6Ha Between 4And7 
+		   0.001236273, 0.9975258,   0.001237898,  // UseIrrigationAnd          Between 3And6Ha MoreThan 7    
+		   0.3594844,   0.2936606,   0.346855,     // UseIrrigationAnd          Between 6And9Ha LessThan4     
+		   0.3600306,   0.3580791,   0.2818904,    // UseIrrigationAnd          Between 6And9Ha Between 4And7 
+		   0.001306379, 0.9973913,   0.001302298,  // UseIrrigationAnd          Between 6And9Ha MoreThan 7    
+		   0.2933545,   0.3532287,   0.3534169,    // UseIrrigationAnd          MoreThan 9Ha    LessThan4     
+		   0.3798185,   0.2957337,   0.3244478,    // UseIrrigationAnd          MoreThan 9Ha    Between 4And7 
+		   0.3823057,   0.3326664,   0.2850279,    // UseIrrigationAnd          MoreThan 9Ha    MoreThan 7    
+		   0.359284,    0.3381386,   0.3025774,    // UseIrrigation             LessThan 3Ha    LessThan4     
+		   0.7686924,   0.005444257, 0.2258634,    // UseIrrigation             LessThan 3Ha    Between 4And7 
+		   8.87775e-4,  0.9982267,   8.855014e-4,  // UseIrrigation             LessThan 3Ha    MoreThan 7    
+		   0.9979244,   0.001039872, 0.001035667,  // UseIrrigation             Between 3And6Ha LessThan4     
+		   0.5436136,   0.002091229, 0.4542951,    // UseIrrigation             Between 3And6Ha Between 4And7 
+		   0.2969869,   0.362711,    0.3403021,    // UseIrrigation             Between 3And6Ha MoreThan 7    
+		   0.3290126,   0.330784,    0.3402034,    // UseIrrigation             Between 6And9Ha LessThan4     
+		   0.3741765,   0.2867075,   0.339116,     // UseIrrigation             Between 6And9Ha Between 4And7 
+		   0.3195086,   0.2940246,   0.3864667,    // UseIrrigation             Between 6And9Ha MoreThan 7    
+		   0.3439286,   0.3523086,   0.3037627,    // UseIrrigation             MoreThan 9Ha    LessThan4     
+		   0.3088576,   0.2920547,   0.3990877,    // UseIrrigation             MoreThan 9Ha    Between 4And7 
+		   0.3121612,   0.320028,    0.3678108,    // UseIrrigation             MoreThan 9Ha    MoreThan 7    
+		   0.3666899,   0.3087106,   0.3245996,    // Other                     LessThan 3Ha    LessThan4     
+		   0.3585229,   0.3176656,   0.3238115,    // Other                     LessThan 3Ha    Between 4And7 
+		   0.3262394,   0.3486966,   0.3250641,    // Other                     LessThan 3Ha    MoreThan 7    
+		   0.342329,    0.3392602,   0.3184108,    // Other                     Between 3And6Ha LessThan4     
+		   0.295447,    0.3342889,   0.3702641,    // Other                     Between 3And6Ha Between 4And7 
+		   0.3457875,   0.2818734,   0.3723391,    // Other                     Between 3And6Ha MoreThan 7    
+		   0.3941818,   0.2933051,   0.3125131,    // Other                     Between 6And9Ha LessThan4     
+		   0.2878405,   0.3213507,   0.3908089,    // Other                     Between 6And9Ha Between 4And7 
+		   0.2791881,   0.3308231,   0.3899888,    // Other                     Between 6And9Ha MoreThan 7    
+		   0.3179623,   0.315006,    0.3670317,    // Other                     MoreThan 9Ha    LessThan4     
+		   0.2872827,   0.3311887,   0.3815286,    // Other                     MoreThan 9Ha    Between 4And7 
+		   0.3294408,   0.3272505,   0.3433087);   // Other                     MoreThan 9Ha    MoreThan 7    ;
+	title = "ShareOfHiredLabour";
+	whenchanged = 1639396473;
+	belief = (0.3776299, 0.3419397, 0.2804305);
+	visual V3 {
+		center = (1122, 1404);
+		height = 10;
+		link 2 {
+			path = ((304, 1298), (312, 1260), (954, 1260), (1035, 1329));
+			};
+		};
+	};
+
+node totalLaborManDays {
+	discrete = FALSE;
+	states = (lessThan_120, Between_120And220, Between_220And400, MoreThan_400);
+	levels = (10, 120, 220, 400, 2760);
+	kind = NATURE;
+	chance = CHANCE;
+	inputs = (, farmSize, );
+	parents = (intensificationStrategies, farmSize, shareOfHiredLabour);
+	probs = 
+		// lessThan 120 Between 120And22 Between 220And40 MoreThan 400  // intensificationStrategies farmSize        shareOfHiredLabour 
+		  (0.0412923,   0.2546615,   0.2575411,   0.4465051,    // None                      LessThan 3Ha    LessThan 10Perce   
+		   0.2825344,   0.2086799,   0.3347074,   0.1740783,    // None                      LessThan 3Ha    Between 10And60P   
+		   0.2237091,   0.3893022,   0.1685884,   0.2184,       // None                      LessThan 3Ha    Above 60Percent    
+		   0.2006958,   0.6885828,   0.1040142,   0.006707205,  // None                      Between 3And6Ha LessThan 10Perce   
+		   0.3496181,   0.4124121,   0.2343939,   0.003575819,  // None                      Between 3And6Ha Between 10And60P   
+		   0.4831119,   0.331711,    0.09296413,  0.09221292,   // None                      Between 3And6Ha Above 60Percent    
+		   0.3069048,   0.4555688,   0.08101621,  0.1565103,    // None                      Between 6And9Ha LessThan 10Perce   
+		   0.5504004,   0.44129,     0.004095584, 0.00421402,   // None                      Between 6And9Ha Between 10And60P   
+		   0.2584802,   0.2682341,   0.2378414,   0.2354442,    // None                      Between 6And9Ha Above 60Percent    
+		   0.9956141,   0.001466356, 0.001472784, 0.001446809,  // None                      MoreThan 9Ha    LessThan 10Perce   
+		   0.7399917,   0.005070605, 0.2498886,   0.005049195,  // None                      MoreThan 9Ha    Between 10And60P   
+		   0.9948685,   0.001722979, 0.001707383, 0.001701116,  // None                      MoreThan 9Ha    Above 60Percent    
+		   0.1157975,   0.2605135,   0.2892943,   0.3343948,    // CropMultipleTime          LessThan 3Ha    LessThan 10Perce   
+		   0.1333735,   0.3249865,   0.1336389,   0.4080011,    // CropMultipleTime          LessThan 3Ha    Between 10And60P   
+		   0.241502,    0.004932055, 0.5298863,   0.2236797,    // CropMultipleTime          LessThan 3Ha    Above 60Percent    
+		   0.001281212, 0.001292327, 0.9961308,   0.001295631,  // CropMultipleTime          Between 3And6Ha LessThan 10Perce   
+		   0.001604092, 0.001603668, 0.001629355, 0.9951629,    // CropMultipleTime          Between 3And6Ha Between 10And60P   
+		   0.001637189, 0.9951127,   0.00163732,  0.001612781,  // CropMultipleTime          Between 3And6Ha Above 60Percent    
+		   0.2594655,   0.2235493,   0.2681533,   0.248832,     // CropMultipleTime          Between 6And9Ha LessThan 10Perce   
+		   0.2494393,   0.2611453,   0.2347398,   0.2546757,    // CropMultipleTime          Between 6And9Ha Between 10And60P   
+		   0.2280297,   0.2595644,   0.2161045,   0.2963014,    // CropMultipleTime          Between 6And9Ha Above 60Percent    
+		   0.2433432,   0.2753588,   0.2705371,   0.210761,     // CropMultipleTime          MoreThan 9Ha    LessThan 10Perce   
+		   0.2502267,   0.2438928,   0.2805963,   0.2252842,    // CropMultipleTime          MoreThan 9Ha    Between 10And60P   
+		   0.2487819,   0.2300232,   0.2238324,   0.2973625,    // CropMultipleTime          MoreThan 9Ha    Above 60Percent    
+		   0.0052848,   0.2285428,   0.537821,    0.2283514,    // ApplyFertilizer           LessThan 3Ha    LessThan 10Perce   
+		   0.003452825, 0.3473008,   0.3320746,   0.3171718,    // ApplyFertilizer           LessThan 3Ha    Between 10And60P   
+		   0.003948133, 0.2284086,   0.3734076,   0.3942356,    // ApplyFertilizer           LessThan 3Ha    Above 60Percent    
+		   0.2066538,   0.273927,    0.2604231,   0.2589961,    // ApplyFertilizer           Between 3And6Ha LessThan 10Perce   
+		   0.001460589, 0.9956165,   0.001470924, 0.001451971,  // ApplyFertilizer           Between 3And6Ha Between 10And60P   
+		   0.5596791,   0.003565252, 0.0035704,   0.4331853,    // ApplyFertilizer           Between 3And6Ha Above 60Percent    
+		   0.2352656,   0.2633283,   0.2241078,   0.2772982,    // ApplyFertilizer           Between 6And9Ha LessThan 10Perce   
+		   0.001590838, 0.9952061,   0.001601905, 0.001601147,  // ApplyFertilizer           Between 6And9Ha Between 10And60P   
+		   0.2589058,   0.2478874,   0.2112055,   0.2820013,    // ApplyFertilizer           Between 6And9Ha Above 60Percent    
+		   0.2024564,   0.2746381,   0.2727045,   0.250201,     // ApplyFertilizer           MoreThan 9Ha    LessThan 10Perce   
+		   0.2625801,   0.2316558,   0.2408827,   0.2648814,    // ApplyFertilizer           MoreThan 9Ha    Between 10And60P   
+		   0.9958618,   0.001363022, 0.001391304, 0.001383907,  // ApplyFertilizer           MoreThan 9Ha    Above 60Percent    
+		   0.004734849, 0.3138948,   0.429611,    0.2517594,    // ApplyImprovedSee          LessThan 3Ha    LessThan 10Perce   
+		   0.00289571,  0.5325491,   0.4616751,   0.00288001,   // ApplyImprovedSee          LessThan 3Ha    Between 10And60P   
+		   0.2174073,   0.3263168,   0.2605659,   0.19571,      // ApplyImprovedSee          LessThan 3Ha    Above 60Percent    
+		   0.001611623, 0.001613717, 0.9952069,   0.001567762,  // ApplyImprovedSee          Between 3And6Ha LessThan 10Perce   
+		   0.9946432,   0.001786937, 0.001773312, 0.001796613,  // ApplyImprovedSee          Between 3And6Ha Between 10And60P   
+		   0.005061725, 0.005063664, 0.2501043,   0.7397703,    // ApplyImprovedSee          Between 3And6Ha Above 60Percent    
+		   0.9953852,   0.001546945, 0.001545898, 0.001521939,  // ApplyImprovedSee          Between 6And9Ha LessThan 10Perce   
+		   0.2520601,   0.2333183,   0.2347782,   0.2798434,    // ApplyImprovedSee          Between 6And9Ha Between 10And60P   
+		   0.2834541,   0.2434979,   0.2248473,   0.2482007,    // ApplyImprovedSee          Between 6And9Ha Above 60Percent    
+		   0.2553118,   0.2924772,   0.2443942,   0.2078169,    // ApplyImprovedSee          MoreThan 9Ha    LessThan 10Perce   
+		   0.9955466,   0.001476314, 0.001489891, 0.00148718,   // ApplyImprovedSee          MoreThan 9Ha    Between 10And60P   
+		   0.9940388,   0.001978932, 0.002000645, 0.00198165,   // ApplyImprovedSee          MoreThan 9Ha    Above 60Percent    
+		   0.00533671,  0.1994476,   0.005319153, 0.7898965,    // UseIrrigationAnd          LessThan 3Ha    LessThan 10Perce   
+		   0.9948202,   0.001711593, 0.001739034, 0.001729125,  // UseIrrigationAnd          LessThan 3Ha    Between 10And60P   
+		   0.1125256,   0.2614595,   0.3037932,   0.3222218,    // UseIrrigationAnd          LessThan 3Ha    Above 60Percent    
+		   0.2692391,   0.2159816,   0.2619337,   0.2528455,    // UseIrrigationAnd          Between 3And6Ha LessThan 10Perce   
+		   0.004290484, 0.4981218,   0.4932181,   0.004369662,  // UseIrrigationAnd          Between 3And6Ha Between 10And60P   
+		   0.9954024,   0.0015308,   0.00154179,  0.001525038,  // UseIrrigationAnd          Between 3And6Ha Above 60Percent    
+		   0.2875734,   0.2185559,   0.2285556,   0.2653152,    // UseIrrigationAnd          Between 6And9Ha LessThan 10Perce   
+		   0.9960811,   0.001305191, 0.001308653, 0.00130504,   // UseIrrigationAnd          Between 6And9Ha Between 10And60P   
+		   0.2707788,   0.2062481,   0.2846236,   0.2383495,    // UseIrrigationAnd          Between 6And9Ha Above 60Percent    
+		   0.2323481,   0.2158074,   0.2786864,   0.2731581,    // UseIrrigationAnd          MoreThan 9Ha    LessThan 10Perce   
+		   0.2263264,   0.2283119,   0.2410275,   0.3043342,    // UseIrrigationAnd          MoreThan 9Ha    Between 10And60P   
+		   0.2387008,   0.2804256,   0.2164407,   0.2644329,    // UseIrrigationAnd          MoreThan 9Ha    Above 60Percent    
+		   0.004916359, 0.252817,    0.5031877,   0.2390789,    // UseIrrigation             LessThan 3Ha    LessThan 10Perce   
+		   0.004436443, 0.0045567,   0.5214405,   0.4695664,    // UseIrrigation             LessThan 3Ha    Between 10And60P   
+		   0.9959857,   0.0013459,   0.001334728, 0.001333613,  // UseIrrigation             LessThan 3Ha    Above 60Percent    
+		   0.4570464,   0.5355245,   0.003726423, 0.003702625,  // UseIrrigation             Between 3And6Ha LessThan 10Perce   
+		   0.2014699,   0.2668464,   0.2530268,   0.2786569,    // UseIrrigation             Between 3And6Ha Between 10And60P   
+		   0.9957204,   0.001426754, 0.001419613, 0.001433263,  // UseIrrigation             Between 3And6Ha Above 60Percent    
+		   0.2355595,   0.2501393,   0.2617162,   0.2525849,    // UseIrrigation             Between 6And9Ha LessThan 10Perce   
+		   0.2171136,   0.268264,    0.2673761,   0.2472463,    // UseIrrigation             Between 6And9Ha Between 10And60P   
+		   0.2416379,   0.2809009,   0.2201178,   0.2573434,    // UseIrrigation             Between 6And9Ha Above 60Percent    
+		   0.2722202,   0.2539583,   0.2043837,   0.2694378,    // UseIrrigation             MoreThan 9Ha    LessThan 10Perce   
+		   0.2534843,   0.270537,    0.2198881,   0.2560906,    // UseIrrigation             MoreThan 9Ha    Between 10And60P   
+		   0.2290934,   0.2505563,   0.3003613,   0.219989,     // UseIrrigation             MoreThan 9Ha    Above 60Percent    
+		   0.2660386,   0.2091262,   0.2511531,   0.2736821,    // Other                     LessThan 3Ha    LessThan 10Perce   
+		   0.2602259,   0.234391,    0.2613762,   0.244007,     // Other                     LessThan 3Ha    Between 10And60P   
+		   0.267206,    0.2115825,   0.287472,    0.2337395,    // Other                     LessThan 3Ha    Above 60Percent    
+		   0.2741483,   0.2202019,   0.236818,    0.2688318,    // Other                     Between 3And6Ha LessThan 10Perce   
+		   0.2407196,   0.2562246,   0.2598388,   0.243217,     // Other                     Between 3And6Ha Between 10And60P   
+		   0.2611124,   0.2533044,   0.2199475,   0.2656356,    // Other                     Between 3And6Ha Above 60Percent    
+		   0.2733731,   0.2164874,   0.2656728,   0.2444667,    // Other                     Between 6And9Ha LessThan 10Perce   
+		   0.2667791,   0.2446366,   0.2166577,   0.2719266,    // Other                     Between 6And9Ha Between 10And60P   
+		   0.2388888,   0.2406846,   0.2373387,   0.2830879,    // Other                     Between 6And9Ha Above 60Percent    
+		   0.2638228,   0.219892,    0.2382702,   0.278015,     // Other                     MoreThan 9Ha    LessThan 10Perce   
+		   0.2339619,   0.2221315,   0.2990264,   0.2448802,    // Other                     MoreThan 9Ha    Between 10And60P   
+		   0.2589137,   0.2565203,   0.2211752,   0.2633908);   // Other                     MoreThan 9Ha    Above 60Percent    ;
+	title = "LabourInManDays";
+	whenchanged = 1639396473;
+	belief = (0.2306015, 0.2858749, 0.2467142, 0.2368094);
+	visual V3 {
+		center = (1590, 1416);
+		height = 9;
+		link 2 {
+			path = ((288, 1474), (288, 1530), (1518, 1530), (1535, 1504));
+			};
+		};
+	};
+
+node percentNonfarmIncome {
+	discrete = FALSE;
+	states = (None, LessThan30Perc, MoreThan30Perc);
+	levels = (0, 0, 30, 92);
+	kind = NATURE;
+	chance = CHANCE;
+	parents = (intensificationStrategies);
+	probs = 
+		// None         LessThan30Perc MoreThan30Perc  // intensificationStrategies 
+		  (0.7935917,   0.1142486,   0.09215978,   // None                      
+		   0.5908788,   0.3123489,   0.09677229,   // CropMultipleTime          
+		   0.6087842,   0.2172396,   0.1739762,    // ApplyFertilizer           
+		   0.7179443,   0.2337721,   0.0482836,    // ApplyImprovedSee          
+		   0.7898575,   0.1242595,   0.08588303,   // UseIrrigationAnd          
+		   0.9980475,   9.7508e-4,   9.774296e-4,  // UseIrrigation             
+		   0.3180087,   0.3760055,   0.3059858);   // Other                     ;
+	title = "PercentOfNonFarmIncome";
+	whenchanged = 1639396473;
+	belief = (0.761076, 0.1490344, 0.08988959);
+	visual V3 {
+		center = (2016, 1404);
+		height = 8;
+		};
+	};
+
+node commercializationIndex {
+	discrete = FALSE;
+	states = (LessThan_30Percent, Between_30And60Percent, MoreThan_60Percent);
+	levels = (0, 30, 60, 100);
+	kind = NATURE;
+	chance = CHANCE;
+	parents = (intensificationStrategies, ageOfTheHouseholdHead, distanceToBigMarket);
+	probs = 
+		// LessThan 30Perce Between 30And60P MoreThan 60Perce  // intensificationStrategies ageOfTheHouseholdHead distanceToBigMarket 
+		  (0.1883406,   0.3521876,   0.4594717,    // None                      between 24And35       LessThan15Km        
+		   0.100921,    0.3265566,   0.5725223,    // None                      between 24And35       Between15And30Km    
+		   0.002677583, 0.4661227,   0.5312,       // None                      between 24And35       Above30Km           
+		   0.2359267,   0.2640634,   0.5000098,    // None                      between 35and45       LessThan15Km        
+		   0.1557089,   0.5176925,   0.3265986,    // None                      between 35and45       Between15And30Km    
+		   0.4355944,   0.1761693,   0.3882363,    // None                      between 35and45       Above30Km           
+		   0.1383068,   0.2314955,   0.6301976,    // None                      between 45And55       LessThan15Km        
+		   0.5253363,   0.266935,    0.2077287,    // None                      between 45And55       Between15And30Km    
+		   0.3977025,   0.4718522,   0.1304453,    // None                      between 45And55       Above30Km           
+		   0.4146076,   0.5412955,   0.04409695,   // None                      Above 55              LessThan15Km        
+		   0.3937472,   0.3826412,   0.2236116,    // None                      Above 55              Between15And30Km    
+		   0.2773876,   0.5597197,   0.1628927,    // None                      Above 55              Above30Km           
+		   0.5750964,   0.4222216,   0.002682031,  // CropMultipleTime          between 24And35       LessThan15Km        
+		   0.3192109,   0.2999935,   0.3807957,    // CropMultipleTime          between 24And35       Between15And30Km    
+		   0.3751,      0.617859,    0.00704102,   // CropMultipleTime          between 24And35       Above30Km           
+		   9.360836e-4, 0.9981315,   9.324157e-4,  // CropMultipleTime          between 35and45       LessThan15Km        
+		   0.005033656, 0.5192854,   0.4756809,    // CropMultipleTime          between 35and45       Between15And30Km    
+		   0.001381163, 0.9972428,   0.001376047,  // CropMultipleTime          between 35and45       Above30Km           
+		   0.7220444,   0.2733952,   0.004560424,  // CropMultipleTime          between 45And55       LessThan15Km        
+		   0.002744786, 0.4658528,   0.5314024,    // CropMultipleTime          between 45And55       Between15And30Km    
+		   9.774901e-4, 0.9980401,   9.823806e-4,  // CropMultipleTime          between 45And55       Above30Km           
+		   0.001213772, 0.00121,     0.9975762,    // CropMultipleTime          Above 55              LessThan15Km        
+		   9.301183e-4, 0.9981341,   9.358008e-4,  // CropMultipleTime          Above 55              Between15And30Km    
+		   0.441162,    0.3758098,   0.1830282,    // CropMultipleTime          Above 55              Above30Km           
+		   0.001035249, 0.001035258, 0.9979295,    // ApplyFertilizer           between 24And35       LessThan15Km        
+		   0.005349142, 0.2929173,   0.7017336,    // ApplyFertilizer           between 24And35       Between15And30Km    
+		   0.001365547, 0.001368079, 0.9972664,    // ApplyFertilizer           between 24And35       Above30Km           
+		   0.004937589, 0.2965866,   0.6984758,    // ApplyFertilizer           between 35and45       LessThan15Km        
+		   0.3547558,   0.3222578,   0.3229863,    // ApplyFertilizer           between 35and45       Between15And30Km    
+		   0.005966016, 0.6780543,   0.3159797,    // ApplyFertilizer           between 35and45       Above30Km           
+		   0.002804418, 0.4352202,   0.5619754,    // ApplyFertilizer           between 45And55       LessThan15Km        
+		   9.492329e-4, 0.9981,      9.510052e-4,  // ApplyFertilizer           between 45And55       Between15And30Km    
+		   8.5821e-4,   0.9982871,   8.547332e-4,  // ApplyFertilizer           between 45And55       Above30Km           
+		   0.2779501,   0.3758701,   0.3461798,    // ApplyFertilizer           Above 55              LessThan15Km        
+		   9.54485e-4,  9.509884e-4, 0.9980945,    // ApplyFertilizer           Above 55              Between15And30Km    
+		   0.3633128,   0.3064239,   0.3302633,    // ApplyFertilizer           Above 55              Above30Km           
+		   0.9976448,   0.001175219, 0.001179938,  // ApplyImprovedSee          between 24And35       LessThan15Km        
+		   9.961314e-4, 9.980336e-4, 0.9980058,    // ApplyImprovedSee          between 24And35       Between15And30Km    
+		   0.00263392,  0.5310305,   0.4663355,    // ApplyImprovedSee          between 24And35       Above30Km           
+		   0.3693078,   0.004503734, 0.6261885,    // ApplyImprovedSee          between 35and45       LessThan15Km        
+		   0.001037905, 0.997917,    0.001045081,  // ApplyImprovedSee          between 35and45       Between15And30Km    
+		   0.1620726,   0.5600426,   0.2778848,    // ApplyImprovedSee          between 35and45       Above30Km           
+		   0.001174258, 0.9976536,   0.001172124,  // ApplyImprovedSee          between 45And55       LessThan15Km        
+		   0.3734172,   0.004400779, 0.622182,     // ApplyImprovedSee          between 45And55       Between15And30Km    
+		   0.001004113, 0.9979952,   0.001000688,  // ApplyImprovedSee          between 45And55       Above30Km           
+		   0.3202028,   0.3066274,   0.3731697,    // ApplyImprovedSee          Above 55              LessThan15Km        
+		   0.003983755, 0.8416585,   0.1543577,    // ApplyImprovedSee          Above 55              Between15And30Km    
+		   0.5517499,   0.001946723, 0.4463034,    // ApplyImprovedSee          Above 55              Above30Km           
+		   9.894787e-4, 0.9980286,   9.819395e-4,  // UseIrrigationAnd          between 24And35       LessThan15Km        
+		   0.001080678, 0.001074971, 0.9978443,    // UseIrrigationAnd          between 24And35       Between15And30Km    
+		   0.3279895,   0.3329203,   0.3390902,    // UseIrrigationAnd          between 24And35       Above30Km           
+		   0.184396,    0.6263555,   0.1892485,    // UseIrrigationAnd          between 35and45       LessThan15Km        
+		   9.160601e-4, 0.9981629,   9.210029e-4,  // UseIrrigationAnd          between 35and45       Between15And30Km    
+		   0.3137718,   0.3645284,   0.3217,       // UseIrrigationAnd          between 35and45       Above30Km           
+		   0.9980392,   9.783495e-4, 9.824784e-4,  // UseIrrigationAnd          between 45And55       LessThan15Km        
+		   0.2322962,   0.2015661,   0.5661378,    // UseIrrigationAnd          between 45And55       Between15And30Km    
+		   0.001213996, 0.001203184, 0.9975828,    // UseIrrigationAnd          between 45And55       Above30Km           
+		   9.378523e-4, 9.457704e-4, 0.9981164,    // UseIrrigationAnd          Above 55              LessThan15Km        
+		   9.892707e-4, 9.921448e-4, 0.9980186,    // UseIrrigationAnd          Above 55              Between15And30Km    
+		   0.9973468,   0.001324561, 0.001328647,  // UseIrrigationAnd          Above 55              Above30Km           
+		   0.3316571,   0.2897283,   0.3786146,    // UseIrrigation             between 24And35       LessThan15Km        
+		   0.3567985,   0.2742209,   0.3689806,    // UseIrrigation             between 24And35       Between15And30Km    
+		   0.3525301,   0.3610214,   0.2864484,    // UseIrrigation             between 24And35       Above30Km           
+		   0.001374051, 0.9972523,   0.001373643,  // UseIrrigation             between 35and45       LessThan15Km        
+		   0.4941135,   0.5023649,   0.00352166,   // UseIrrigation             between 35and45       Between15And30Km    
+		   0.3591598,   0.2860804,   0.3547598,    // UseIrrigation             between 35and45       Above30Km           
+		   0.001314048, 0.001321422, 0.9973645,    // UseIrrigation             between 45And55       LessThan15Km        
+		   0.006952439, 0.6168213,   0.3762262,    // UseIrrigation             between 45And55       Between15And30Km    
+		   0.3134283,   0.3684329,   0.3181387,    // UseIrrigation             between 45And55       Above30Km           
+		   0.9977484,   0.001129122, 0.001122432,  // UseIrrigation             Above 55              LessThan15Km        
+		   0.00358178,  0.7202995,   0.2761187,    // UseIrrigation             Above 55              Between15And30Km    
+		   0.3029601,   0.319106,    0.3779339,    // UseIrrigation             Above 55              Above30Km           
+		   0.3344516,   0.3730222,   0.2925262,    // Other                     between 24And35       LessThan15Km        
+		   0.3299038,   0.3277782,   0.3423179,    // Other                     between 24And35       Between15And30Km    
+		   0.3209211,   0.3358276,   0.3432513,    // Other                     between 24And35       Above30Km           
+		   0.2908336,   0.3032666,   0.4059,       // Other                     between 35and45       LessThan15Km        
+		   0.3564242,   0.3451495,   0.2984263,    // Other                     between 35and45       Between15And30Km    
+		   0.3061243,   0.3057314,   0.3881443,    // Other                     between 35and45       Above30Km           
+		   0.2902193,   0.3513638,   0.3584168,    // Other                     between 45And55       LessThan15Km        
+		   0.3399277,   0.3239974,   0.336075,     // Other                     between 45And55       Between15And30Km    
+		   0.3523438,   0.353917,    0.2937392,    // Other                     between 45And55       Above30Km           
+		   0.3505159,   0.346512,    0.3029721,    // Other                     Above 55              LessThan15Km        
+		   0.2959493,   0.373631,    0.3304196,    // Other                     Above 55              Between15And30Km    
+		   0.318179,    0.3459589,   0.3358621);   // Other                     Above 55              Above30Km           ;
+	title = "CommercializationIndex";
+	whenchanged = 1639396473;
+	belief = (0.2417768, 0.4216886, 0.3365346);
+	visual V3 {
+		center = (1818, 648);
+		height = 12;
+		link 2 {
+			path = ((288, 554), (288, 492), (1818, 492), (1818, 573));
+			};
+		};
+	};
+
+node ricePrice {
+	discrete = FALSE;
+	levels = (0, 1138, 1230, 1250, 1860);
+	kind = NATURE;
+	chance = CHANCE;
+	parents = (intensificationStrategies);
+	probs = 
+		// 0 to 1138    1138 to 1230 1230 to 1250 1250 to 1860  // intensificationStrategies 
+		  (0.1772109,   0.2699991,   0.2855056,   0.2672843,    // None                      
+		   0.08648062,  0.4494795,   0.2318849,   0.232155,     // CropMultipleTime          
+		   0.1648123,   0.4244469,   0.1041501,   0.3065906,    // ApplyFertilizer           
+		   0.08703379,  0.4194774,   0.3778206,   0.1156682,    // ApplyImprovedSee          
+		   0.05184839,  0.3674737,   0.5288206,   0.05185733,   // UseIrrigationAnd          
+		   0.00391137,  0.2808331,   0.3315156,   0.3837399,    // UseIrrigation             
+		   0.266741,    0.2478329,   0.233849,    0.2515771);   // Other                     ;
+	whenchanged = 1639396473;
+	belief = (0.1428131, 0.3208038, 0.2976946, 0.2386885);
+	visual V3 {
+		center = (552, 396);
+		height = 13;
+		link 1 {
+			path = ((800, 917), (618, 792), (566, 484));
+			};
+		};
+	};
+
+node perCapitaIncome {
+	discrete = FALSE;
+	levels = (0, 160, 280, 600, 5800);
+	kind = NATURE;
+	chance = CHANCE;
+	parents = (intensificationStrategies, ricePrice);
+	probs = 
+		// 0 to 160     160 to 280   280 to 600   600 to 5800   // intensificationStrategies ricePrice    
+		  (0.2118559,   0.2270269,   0.2272761,   0.3338411,    // None                      0 to 1138    
+		   0.2586681,   0.2563117,   0.3385932,   0.1464271,    // None                      1138 to 1230 
+		   0.3565969,   0.3314283,   0.205175,    0.1068,       // None                      1230 to 1250 
+		   0.4667494,   0.2320355,   0.1292554,   0.1719596,    // None                      1250 to 1860 
+		   0.5113976,   0.479989,    0.004338099, 0.004275326,  // CropMultipleTime          0 to 1138    
+		   0.2461684,   0.3209843,   0.3199269,   0.1129204,    // CropMultipleTime          1138 to 1230 
+		   0.00487292,  0.004865273, 0.635142,    0.3551199,    // CropMultipleTime          1230 to 1250 
+		   0.3836733,   0.002690935, 0.3069537,   0.3066821,    // CropMultipleTime          1250 to 1860 
+		   0.00158512,  0.00160157,  0.001575669, 0.9952376,    // ApplyFertilizer           0 to 1138    
+		   0.1757557,   0.2261705,   0.2981852,   0.2998887,    // ApplyFertilizer           1138 to 1230 
+		   0.002812507, 0.002853269, 0.5310844,   0.4632498,    // ApplyFertilizer           1230 to 1250 
+		   0.3529121,   0.1740394,   0.2997836,   0.173265,     // ApplyFertilizer           1250 to 1860 
+		   0.003546857, 0.320215,    0.3387124,   0.3375257,    // ApplyImprovedSee          0 to 1138    
+		   0.05679497,  0.1227644,   0.3477512,   0.4726894,    // ApplyImprovedSee          1138 to 1230 
+		   0.004962632, 0.397211,    0.3195922,   0.2782342,    // ApplyImprovedSee          1230 to 1250 
+		   0.4421147,   0.277893,    0.005394958, 0.2745973,    // ApplyImprovedSee          1250 to 1860 
+		   0.9957788,   0.001376009, 0.001422462, 0.001422715,  // UseIrrigationAnd          0 to 1138    
+		   0.005944497, 0.4702338,   0.1608455,   0.3629762,    // UseIrrigationAnd          1138 to 1230 
+		   0.1760817,   0.1754416,   0.1757055,   0.4727712,    // UseIrrigationAnd          1230 to 1250 
+		   0.001777824, 0.9946919,   0.001754721, 0.001775523,  // UseIrrigationAnd          1250 to 1860 
+		   0.252923,    0.2497459,   0.255805,    0.2415262,    // UseIrrigation             0 to 1138    
+		   0.2897819,   0.004424917, 0.3676851,   0.3381081,    // UseIrrigation             1138 to 1230 
+		   0.2607,      0.2235079,   0.259112,    0.2566803,    // UseIrrigation             1230 to 1250 
+		   0.2270861,   0.2634168,   0.2463931,   0.2631039,    // UseIrrigation             1250 to 1860 
+		   0.2755945,   0.2162172,   0.2416168,   0.2665715,    // Other                     0 to 1138    
+		   0.2624286,   0.2475,      0.2777324,   0.2123392,    // Other                     1138 to 1230 
+		   0.2631103,   0.2211038,   0.2589779,   0.2568079,    // Other                     1230 to 1250 
+		   0.2357636,   0.2569311,   0.2558759,   0.2514293);   // Other                     1250 to 1860 ;
+	whenchanged = 1639396473;
+	belief = (0.2685249, 0.2506692, 0.2455144, 0.2352915);
+	visual V3 {
+		center = (2124, 1080);
+		height = 16;
+		link 2 {
+			path = ((719, 396), (2106, 396), (2122, 992));
+			};
+		};
+	};
+
+node maizePrice {
+	discrete = FALSE;
+	levels = (0, 0, 800, 890, 1120);
+	kind = NATURE;
+	chance = CHANCE;
+	parents = (intensificationStrategies);
+	probs = 
+		// 0            0 to 800     800 to 890   890 to 1120   // intensificationStrategies 
+		  (0.6033804,   0.1344278,   0.1584621,   0.1037296,    // None                      
+		   0.08186854,  0.284618,    0.3923418,   0.2411717,    // CropMultipleTime          
+		   0.4196041,   0.3087555,   0.1801877,   0.09145272,   // ApplyFertilizer           
+		   0.5442261,   0.1221337,   0.2073904,   0.1262498,    // ApplyImprovedSee          
+		   0.5851799,   0.1935568,   0.05695363,  0.1643097,    // UseIrrigationAnd          
+		   0.7374527,   0.1705319,   0.005720145, 0.08629517,   // UseIrrigation             
+		   0.2554405,   0.2887417,   0.2378357,   0.217982);    // Other                     ;
+	whenchanged = 1639396473;
+	belief = (0.5440131, 0.1638493, 0.1716864, 0.1204512);
+	visual V3 {
+		center = (1812, 852);
+		height = 15;
+		};
+	};
+
+node creditaccess {
+	discrete = TRUE;
+	states = (No, Yes);
+	kind = NATURE;
+	chance = CHANCE;
+	parents = (ageOfTheHouseholdHead);
+	probs = 
+		// No           Yes           // ageOfTheHouseholdHead 
+		  (0.7130437,   0.2869562,    // between 24And35       
+		   0.4846714,   0.5153286,    // between 35and45       
+		   0.6558774,   0.3441226,    // between 45And55       
+		   0.7265972,   0.2734028);   // Above 55              ;
+	whenchanged = 1639396473;
+	belief = (0.6306392, 0.3693608);
+	visual V3 {
+		center = (210, 354);
+		height = 14;
+		link 1 {
+			path = ((210, 552), (210, 400));
+			};
+		};
+	};
+NodeSet farmersdecisions {Nodes = (intensificationStrategies, cropChoice);};
+NodeSet TargetNode {Nodes = (intensificationStrategies);};
+ElimOrder = (creditaccess, percentNonfarmIncome, maizePrice, ricePrice, perCapitaIncome, householdSize, distanceToBigMarket, commercializationIndex, shareOfHiredLabour, totalLaborManDays, farmSize, farmType, intensificationStrategies, ageOfTheHouseholdHead, topgraphicWetnessIndex, cropChoice);
+};

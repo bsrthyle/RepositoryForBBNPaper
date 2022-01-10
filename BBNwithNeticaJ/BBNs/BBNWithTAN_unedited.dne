@@ -1,0 +1,1261 @@
+// ~->[DNET-1]->~
+
+// File created by NaschenK at UBonn using Netica 6.09 on Dec 14, 2021 at 02:09:41 UTC.
+
+bnet NewBBNwith17Nodes {
+AutoCompile = TRUE;
+autoupdate = TRUE;
+whenchanged = 1639447767;
+
+visual V3 {
+	defdispform = BELIEFBARS;
+	nodelabeling = TITLE;
+	NodeMaxNumEntries = 50;
+	nodefont = font {shape= "CMU Sans Serif"; size= 16;};
+	linkfont = font {shape= "Arial"; size= 9;};
+	ShowLinkStrengths = 1;
+	windowposn = (0, 0, 2190, 1068);
+	scrollposn = (486, 271);
+	resolution = 72;
+	magnification = 0.524325;
+	drawingbounds = (8289, 4181);
+	showpagebreaks = FALSE;
+	usegrid = TRUE;
+	gridspace = (4, 4);
+	NodeSet Node {BuiltIn = 1; Color = 0x00008000;};
+	NodeSet Nature {BuiltIn = 1; Color = 0x00ffffff;};
+	NodeSet Deterministic {BuiltIn = 1; Color = 0x00d3caa6;};
+	NodeSet Finding {BuiltIn = 1; Color = 0x00c8c8c8;};
+	NodeSet Constant {BuiltIn = 1; Color = 0x00ffffff;};
+	NodeSet ConstantValue {BuiltIn = 1; Color = 0x00ffffb4;};
+	NodeSet Utility {BuiltIn = 1; Color = 0x00ffbdbd;};
+	NodeSet Decision {BuiltIn = 1; Color = 0x00dee8ff;};
+	NodeSet Documentation {BuiltIn = 1; Color = 0x00f0fafa;};
+	NodeSet Title {BuiltIn = 1; Color = 0x00ffffff;};
+	NodeSet farmersdecisions {Color = 0x000080ff;};
+	NodeSet TargetNode {Color = 0x00ff8040;};
+	PrinterSetting A {
+		margins = (508, 508, 508, 508);
+		landscape = TRUE;
+		};
+	};
+
+node intensificationStrategies {
+	discrete = TRUE;
+	states = (None, CropMultipleTimes, ApplyFertilizer, ApplyImprovedSeed, UseIrrigationAndFertilizerAppl, UseIrrigation, Other);
+	statetitles = (, , , , "UseIrrigationAndFertilizerApplication", , );
+	levels = (0, 1, 2, 3, 4, 5, 0);
+	kind = NATURE;
+	chance = CHANCE;
+	parents = ();
+	probs = 
+		// None         CropMultipleTime ApplyFertilizer ApplyImprovedSee UseIrrigationAnd UseIrrigation Other 
+		  (0.6151316,   0.08223684,  0.07236842,  0.1184211,   0.06907894,  0.03947368,  0.003289474);
+	numcases = 304;
+	title = "ChoiceOfIntensificationStrategy";
+	whenchanged = 1639447767;
+	belief = (0.6151316, 0.08223685, 0.07236842, 0.1184211, 0.06907895, 0.03947369, 0.003289474);
+	visual V3 {
+		center = (2028, 1530);
+		height = 2;
+		};
+	};
+
+node householdSize {
+	discrete = FALSE;
+	states = (LessThan4_, Between_4And7, MoreThan_7);
+	levels = (1, 4, 7, 11);
+	kind = NATURE;
+	chance = CHANCE;
+	parents = (intensificationStrategies);
+	probs = 
+		// LessThan4    Between 4And7 MoreThan 7   // intensificationStrategies 
+		  (0.1957672,   0.5661376,   0.2380952,    // None                      
+		   0.3703704,   0.4444444,   0.1851852,    // CropMultipleTime          
+		   0.2916667,   0.5416667,   0.1666667,    // ApplyFertilizer           
+		   0.3157895,   0.5526316,   0.131579,     // ApplyImprovedSee          
+		   0.1304348,   0.6521739,   0.2173913,    // UseIrrigationAnd          
+		   0.3571429,   0.5,         0.1428571,    // UseIrrigation             
+		   0.3333333,   0.3333333,   0.3333333);   // Other                     ;
+	numcases = 
+		                 // intensificationStrategies 
+		  (189,          // None                      
+		   27,           // CropMultipleTime          
+		   24,           // ApplyFertilizer           
+		   38,           // ApplyImprovedSee          
+		   23,           // UseIrrigationAnd          
+		   14,           // UseIrrigation             
+		   3);           // Other                     ;
+	title = "SizeOfHousehold";
+	whenchanged = 1639447767;
+	belief = (0.2335888, 0.5553264, 0.2110848);
+	visual V3 {
+		center = (2028, 762);
+		height = 10;
+		};
+	};
+
+node ricePrice {
+	discrete = FALSE;
+	levels = (0, 1138, 1230, 1250, 1860);
+	kind = NATURE;
+	chance = CHANCE;
+	parents = (intensificationStrategies, householdSize);
+	probs = 
+		// 0 to 1138    1138 to 1230 1230 to 1250 1250 to 1860  // intensificationStrategies householdSize 
+		  (0.125,       0.325,       0.175,       0.375,        // None                      LessThan4     
+		   0.1181818,   0.2727273,   0.2909091,   0.3181818,    // None                      Between 4And7 
+		   0.3958333,   0.25,        0.25,        0.1041667,    // None                      MoreThan 7    
+		   0.07692308,  0.1538462,   0.3076923,   0.4615385,    // CropMultipleTime          LessThan4     
+		   0.1333333,   0.4,         0.2666667,   0.2,          // CropMultipleTime          Between 4And7 
+		   0.25,        0.5,         0.125,       0.125,        // CropMultipleTime          MoreThan 7    
+		   0.2,         0.2,         0.3,         0.3,          // ApplyFertilizer           LessThan4     
+		   0.1875,      0.5625,      0.0625,      0.1875,       // ApplyFertilizer           Between 4And7 
+		   0.1428571,   0.2857143,   0.1428571,   0.4285714,    // ApplyFertilizer           MoreThan 7    
+		   0.2,         0.4,         0.3333333,   0.06666667,   // ApplyImprovedSee          LessThan4     
+		   0.08333334,  0.5,         0.2916667,   0.125,        // ApplyImprovedSee          Between 4And7 
+		   0.125,       0.125,       0.375,       0.375,        // ApplyImprovedSee          MoreThan 7    
+		   0.1666667,   0.3333333,   0.1666667,   0.3333333,    // UseIrrigationAnd          LessThan4     
+		   0.1111111,   0.3333333,   0.5,         0.05555556,   // UseIrrigationAnd          Between 4And7 
+		   0.125,       0.125,       0.625,       0.125,        // UseIrrigationAnd          MoreThan 7    
+		   0.125,       0.375,       0.25,        0.25,         // UseIrrigation             LessThan4     
+		   0.1,         0.2,         0.3,         0.4,          // UseIrrigation             Between 4And7 
+		   0.2,         0.2,         0.4,         0.2,          // UseIrrigation             MoreThan 7    
+		   0.25,        0.25,        0.25,        0.25,         // Other                     LessThan4     
+		   0.25,        0.25,        0.25,        0.25,         // Other                     Between 4And7 
+		   0.25,        0.25,        0.25,        0.25);        // Other                     MoreThan 7    ;
+	numcases = 
+		                 // intensificationStrategies householdSize 
+		  (40,           // None                      LessThan4     
+		   110,          // None                      Between 4And7 
+		   48,           // None                      MoreThan 7    
+		   13,           // CropMultipleTime          LessThan4     
+		   15,           // CropMultipleTime          Between 4And7 
+		   8,            // CropMultipleTime          MoreThan 7    
+		   10,           // ApplyFertilizer           LessThan4     
+		   16,           // ApplyFertilizer           Between 4And7 
+		   7,            // ApplyFertilizer           MoreThan 7    
+		   15,           // ApplyImprovedSee          LessThan4     
+		   24,           // ApplyImprovedSee          Between 4And7 
+		   8,            // ApplyImprovedSee          MoreThan 7    
+		   6,            // UseIrrigationAnd          LessThan4     
+		   18,           // UseIrrigationAnd          Between 4And7 
+		   8,            // UseIrrigationAnd          MoreThan 7    
+		   8,            // UseIrrigation             LessThan4     
+		   10,           // UseIrrigation             Between 4And7 
+		   5,            // UseIrrigation             MoreThan 7    
+		   4,            // Other                     LessThan4     
+		   4,            // Other                     Between 4And7 
+		   4);           // Other                     MoreThan 7    ;
+	whenchanged = 1639447767;
+	belief = (0.1674524, 0.3080767, 0.2738578, 0.2506131);
+	visual V3 {
+		center = (2748, 762);
+		height = 7;
+		};
+	};
+
+node maizePrice {
+	discrete = FALSE;
+	levels = (0, 0, 800, 890, 1120);
+	kind = NATURE;
+	chance = CHANCE;
+	parents = (intensificationStrategies, ricePrice);
+	probs = 
+		// 0            0 to 800     800 to 890   890 to 1120   // intensificationStrategies ricePrice    
+		  (0.2631579,   0.3157895,   0.1842105,   0.2368421,    // None                      0 to 1138    
+		   0.4464286,   0.2678571,   0.2678571,   0.01785714,   // None                      1138 to 1230 
+		   0.8269231,   0.05769231,  0.01923077,  0.09615385,   // None                      1230 to 1250 
+		   0.5892857,   0.01785714,  0.25,        0.1428571,    // None                      1250 to 1860 
+		   0.1666667,   0.1666667,   0.3333333,   0.3333333,    // CropMultipleTime          0 to 1138    
+		   0.1538462,   0.1538462,   0.6153846,   0.07692308,   // CropMultipleTime          1138 to 1230 
+		   0.2,         0.6,         0.1,         0.1,          // CropMultipleTime          1230 to 1250 
+		   0.09090909,  0.09090909,  0.1818182,   0.6363636,    // CropMultipleTime          1250 to 1860 
+		   0.1428571,   0.2857143,   0.1428571,   0.4285714,    // ApplyFertilizer           0 to 1138    
+		   0.3571429,   0.3571429,   0.2142857,   0.07142857,   // ApplyFertilizer           1138 to 1230 
+		   0.3333333,   0.3333333,   0.1666667,   0.1666667,    // ApplyFertilizer           1230 to 1250 
+		   0.4,         0.2,         0.3,         0.1,          // ApplyFertilizer           1250 to 1860 
+		   0.2857143,   0.1428571,   0.1428571,   0.4285714,    // ApplyImprovedSee          0 to 1138    
+		   0.35,        0.25,        0.35,        0.05,         // ApplyImprovedSee          1138 to 1230 
+		   0.625,       0.125,       0.0625,      0.1875,       // ApplyImprovedSee          1230 to 1250 
+		   0.375,       0.125,       0.25,        0.25,         // ApplyImprovedSee          1250 to 1860 
+		   0.4,         0.2,         0.2,         0.2,          // UseIrrigationAnd          0 to 1138    
+		   0.4,         0.4,         0.1,         0.1,          // UseIrrigationAnd          1138 to 1230 
+		   0.625,       0.0625,      0.0625,      0.25,         // UseIrrigationAnd          1230 to 1250 
+		   0.2,         0.2,         0.4,         0.2,          // UseIrrigationAnd          1250 to 1860 
+		   0.25,        0.25,        0.25,        0.25,         // UseIrrigation             0 to 1138    
+		   0.2857143,   0.4285714,   0.1428571,   0.1428571,    // UseIrrigation             1138 to 1230 
+		   0.625,       0.125,       0.125,       0.125,        // UseIrrigation             1230 to 1250 
+		   0.5,         0.125,       0.125,       0.25,         // UseIrrigation             1250 to 1860 
+		   0.25,        0.25,        0.25,        0.25,         // Other                     0 to 1138    
+		   0.25,        0.25,        0.25,        0.25,         // Other                     1138 to 1230 
+		   0.25,        0.25,        0.25,        0.25,         // Other                     1230 to 1250 
+		   0.25,        0.25,        0.25,        0.25);        // Other                     1250 to 1860 ;
+	numcases = 
+		                 // intensificationStrategies ricePrice    
+		  (38,           // None                      0 to 1138    
+		   56,           // None                      1138 to 1230 
+		   52,           // None                      1230 to 1250 
+		   56,           // None                      1250 to 1860 
+		   6,            // CropMultipleTime          0 to 1138    
+		   13,           // CropMultipleTime          1138 to 1230 
+		   10,           // CropMultipleTime          1230 to 1250 
+		   11,           // CropMultipleTime          1250 to 1860 
+		   7,            // ApplyFertilizer           0 to 1138    
+		   14,           // ApplyFertilizer           1138 to 1230 
+		   6,            // ApplyFertilizer           1230 to 1250 
+		   10,           // ApplyFertilizer           1250 to 1860 
+		   7,            // ApplyImprovedSee          0 to 1138    
+		   20,           // ApplyImprovedSee          1138 to 1230 
+		   16,           // ApplyImprovedSee          1230 to 1250 
+		   8,            // ApplyImprovedSee          1250 to 1860 
+		   5,            // UseIrrigationAnd          0 to 1138    
+		   10,           // UseIrrigationAnd          1138 to 1230 
+		   16,           // UseIrrigationAnd          1230 to 1250 
+		   5,            // UseIrrigationAnd          1250 to 1860 
+		   4,            // UseIrrigation             0 to 1138    
+		   7,            // UseIrrigation             1138 to 1230 
+		   8,            // UseIrrigation             1230 to 1250 
+		   8,            // UseIrrigation             1250 to 1860 
+		   4,            // Other                     0 to 1138    
+		   4,            // Other                     1138 to 1230 
+		   4,            // Other                     1230 to 1250 
+		   4);           // Other                     1250 to 1860 ;
+	whenchanged = 1639447767;
+	belief = (0.4779434, 0.1803937, 0.1960953, 0.1455676);
+	visual V3 {
+		center = (3072, 1038);
+		height = 13;
+		};
+	};
+
+node cropChoice {
+	discrete = TRUE;
+	states = (RiceAndMaize, RiceMaizeAndVegit, Rice, VegitAndMaize, VegitAndRice, Maize, Vegitables);
+	kind = NATURE;
+	chance = CHANCE;
+	parents = (intensificationStrategies, maizePrice);
+	probs = 
+		// RiceAndMaize RiceMaizeAndVegi Rice     VegitAndMaize VegitAndRice Maize       Vegitables    // intensificationStrategies maizePrice  
+		  (0.00877193,  0.00877193,  0.8596491,   0.00877193,  0.09649123,  0.00877193,  0.00877193,   // None                      0           
+		   0.5882353,   0.1176471,   0.1764706,   0.02941176,  0.02941176,  0.02941176,  0.02941176,   // None                      0 to 800    
+		   0.675,       0.05,        0.1,         0.025,       0.05,        0.075,       0.025,        // None                      800 to 890  
+		   0.6153846,   0.07692308,  0.1153846,   0.03846154,  0.03846154,  0.07692308,  0.03846154,   // None                      890 to 1120 
+		   0.1111111,   0.1111111,   0.2222222,   0.1111111,   0.2222222,   0.1111111,   0.1111111,    // CropMultipleTime          0           
+		   0.4615385,   0.1538462,   0.07692308,  0.07692308,  0.07692308,  0.07692308,  0.07692308,   // CropMultipleTime          0 to 800    
+		   0.4375,      0.125,       0.125,       0.0625,      0.0625,      0.125,       0.0625,       // CropMultipleTime          800 to 890  
+		   0.3571429,   0.1428571,   0.07142857,  0.07142857,  0.1428571,   0.1428571,   0.07142857,   // CropMultipleTime          890 to 1120 
+		   0.06666667,  0.06666667,  0.4666667,   0.06666667,  0.2,         0.06666667,  0.06666667,   // ApplyFertilizer           0           
+		   0.4285714,   0.1428571,   0.07142857,  0.1428571,   0.07142857,  0.07142857,  0.07142857,   // ApplyFertilizer           0 to 800    
+		   0.3636364,   0.1818182,   0.09090909,  0.09090909,  0.09090909,  0.09090909,  0.09090909,   // ApplyFertilizer           800 to 890  
+		   0.2222222,   0.2222222,   0.1111111,   0.1111111,   0.1111111,   0.1111111,   0.1111111,    // ApplyFertilizer           890 to 1120 
+		   0.04,        0.04,        0.68,        0.04,        0.12,        0.04,        0.04,         // ApplyImprovedSee          0           
+		   0.4166667,   0.08333334,  0.1666667,   0.08333334,  0.08333334,  0.08333334,  0.08333334,   // ApplyImprovedSee          0 to 800    
+		   0.5,         0.1428571,   0.07142857,  0.07142857,  0.07142857,  0.07142857,  0.07142857,   // ApplyImprovedSee          800 to 890  
+		   0.3333333,   0.25,        0.08333334,  0.08333334,  0.08333334,  0.08333334,  0.08333334,   // ApplyImprovedSee          890 to 1120 
+		   0.05,        0.05,        0.4,         0.05,        0.3,         0.05,        0.1,          // UseIrrigationAnd          0           
+		   0.1,         0.4,         0.1,         0.1,         0.1,         0.1,         0.1,          // UseIrrigationAnd          0 to 800    
+		   0.125,       0.25,        0.125,       0.125,       0.125,       0.125,       0.125,        // UseIrrigationAnd          800 to 890  
+		   0.3,         0.2,         0.1,         0.1,         0.1,         0.1,         0.1,          // UseIrrigationAnd          890 to 1120 
+		   0.06666667,  0.06666667,  0.6,         0.06666667,  0.06666667,  0.06666667,  0.06666667,   // UseIrrigation             0           
+		   0.2222222,   0.1111111,   0.2222222,   0.1111111,   0.1111111,   0.1111111,   0.1111111,    // UseIrrigation             0 to 800    
+		   0.1428571,   0.1428571,   0.1428571,   0.1428571,   0.1428571,   0.1428571,   0.1428571,    // UseIrrigation             800 to 890  
+		   0.125,       0.25,        0.125,       0.125,       0.125,       0.125,       0.125,        // UseIrrigation             890 to 1120 
+		   0.1428571,   0.1428571,   0.1428571,   0.1428571,   0.1428571,   0.1428571,   0.1428571,    // Other                     0           
+		   0.1428571,   0.1428571,   0.1428571,   0.1428571,   0.1428571,   0.1428571,   0.1428571,    // Other                     0 to 800    
+		   0.1428571,   0.1428571,   0.1428571,   0.1428571,   0.1428571,   0.1428571,   0.1428571,    // Other                     800 to 890  
+		   0.1428571,   0.1428571,   0.1428571,   0.1428571,   0.1428571,   0.1428571,   0.1428571);   // Other                     890 to 1120 ;
+	numcases = 
+		                 // intensificationStrategies maizePrice  
+		  (114,          // None                      0           
+		   34,           // None                      0 to 800    
+		   40,           // None                      800 to 890  
+		   26,           // None                      890 to 1120 
+		   9,            // CropMultipleTime          0           
+		   13,           // CropMultipleTime          0 to 800    
+		   16,           // CropMultipleTime          800 to 890  
+		   14,           // CropMultipleTime          890 to 1120 
+		   15,           // ApplyFertilizer           0           
+		   14,           // ApplyFertilizer           0 to 800    
+		   11,           // ApplyFertilizer           800 to 890  
+		   9,            // ApplyFertilizer           890 to 1120 
+		   25,           // ApplyImprovedSee          0           
+		   12,           // ApplyImprovedSee          0 to 800    
+		   14,           // ApplyImprovedSee          800 to 890  
+		   12,           // ApplyImprovedSee          890 to 1120 
+		   20,           // UseIrrigationAnd          0           
+		   10,           // UseIrrigationAnd          0 to 800    
+		   8,            // UseIrrigationAnd          800 to 890  
+		   10,           // UseIrrigationAnd          890 to 1120 
+		   15,           // UseIrrigation             0           
+		   9,            // UseIrrigation             0 to 800    
+		   7,            // UseIrrigation             800 to 890  
+		   8,            // UseIrrigation             890 to 1120 
+		   7,            // Other                     0           
+		   7,            // Other                     0 to 800    
+		   7,            // Other                     800 to 890  
+		   7);           // Other                     890 to 1120 ;
+	title = "CropChoice";
+	whenchanged = 1639447767;
+	belief = (0.2710434, 0.07584061, 0.4254227, 0.04197486, 0.09158602, 0.05202278, 0.04210966);
+	visual V3 {
+		center = (780, 1866);
+		height = 4;
+		link 2 {
+			path = ((3072, 1126), (3072, 1866), (971, 1866));
+			};
+		};
+	};
+
+node ageOfTheHouseholdHead {
+	discrete = FALSE;
+	states = (between_24And35, between_35and45, between_45And55, Above_55);
+	levels = (24, 35, 45, 55, INFINITY);
+	kind = NATURE;
+	chance = CHANCE;
+	parents = (intensificationStrategies, cropChoice);
+	probs = 
+		// between 24And35 between 35and45 between 45And55 Above 55  // intensificationStrategies cropChoice       
+		  (0.125,       0.296875,    0.328125,    0.25,         // None                      RiceAndMaize     
+		   0.1111111,   0.2222222,   0.2222222,   0.4444444,    // None                      RiceMaizeAndVegi 
+		   0.2072072,   0.3333333,   0.2702703,   0.1891892,    // None                      Rice             
+		   0.25,        0.25,        0.25,        0.25,         // None                      VegitAndMaize    
+		   0.1333333,   0.3333333,   0.1333333,   0.4,          // None                      VegitAndRice     
+		   0.1428571,   0.4285714,   0.2857143,   0.1428571,    // None                      Maize            
+		   0.25,        0.25,        0.25,        0.25,         // None                      Vegitables       
+		   0.2631579,   0.1052632,   0.2631579,   0.368421,     // CropMultipleTime          RiceAndMaize     
+		   0.1428571,   0.2857143,   0.2857143,   0.2857143,    // CropMultipleTime          RiceMaizeAndVegi 
+		   0.1666667,   0.5,         0.1666667,   0.1666667,    // CropMultipleTime          Rice             
+		   0.25,        0.25,        0.25,        0.25,         // CropMultipleTime          VegitAndMaize    
+		   0.1666667,   0.3333333,   0.1666667,   0.3333333,    // CropMultipleTime          VegitAndRice     
+		   0.3333333,   0.1666667,   0.3333333,   0.1666667,    // CropMultipleTime          Maize            
+		   0.25,        0.25,        0.25,        0.25,         // CropMultipleTime          Vegitables       
+		   0.1538462,   0.4615385,   0.3076923,   0.07692308,   // ApplyFertilizer           RiceAndMaize     
+		   0.1428571,   0.1428571,   0.4285714,   0.2857143,    // ApplyFertilizer           RiceMaizeAndVegi 
+		   0.5,         0.1,         0.3,         0.1,          // ApplyFertilizer           Rice             
+		   0.2,         0.2,         0.2,         0.4,          // ApplyFertilizer           VegitAndMaize    
+		   0.1666667,   0.3333333,   0.3333333,   0.1666667,    // ApplyFertilizer           VegitAndRice     
+		   0.25,        0.25,        0.25,        0.25,         // ApplyFertilizer           Maize            
+		   0.25,        0.25,        0.25,        0.25,         // ApplyFertilizer           Vegitables       
+		   0.1764706,   0.2352941,   0.2352941,   0.3529412,    // ApplyImprovedSee          RiceAndMaize     
+		   0.1428571,   0.1428571,   0.1428571,   0.5714286,    // ApplyImprovedSee          RiceMaizeAndVegi 
+		   0.1428571,   0.5714286,   0.0952381,   0.1904762,    // ApplyImprovedSee          Rice             
+		   0.25,        0.25,        0.25,        0.25,         // ApplyImprovedSee          VegitAndMaize    
+		   0.3333333,   0.1666667,   0.3333333,   0.1666667,    // ApplyImprovedSee          VegitAndRice     
+		   0.25,        0.25,        0.25,        0.25,         // ApplyImprovedSee          Maize            
+		   0.25,        0.25,        0.25,        0.25,         // ApplyImprovedSee          Vegitables       
+		   0.1666667,   0.3333333,   0.3333333,   0.1666667,    // UseIrrigationAnd          RiceAndMaize     
+		   0.2222222,   0.2222222,   0.4444444,   0.1111111,    // UseIrrigationAnd          RiceMaizeAndVegi 
+		   0.09090909,  0.5454546,   0.1818182,   0.1818182,    // UseIrrigationAnd          Rice             
+		   0.25,        0.25,        0.25,        0.25,         // UseIrrigationAnd          VegitAndMaize    
+		   0.2222222,   0.1111111,   0.3333333,   0.3333333,    // UseIrrigationAnd          VegitAndRice     
+		   0.25,        0.25,        0.25,        0.25,         // UseIrrigationAnd          Maize            
+		   0.4,         0.2,         0.2,         0.2,          // UseIrrigationAnd          Vegitables       
+		   0.2,         0.2,         0.2,         0.4,          // UseIrrigation             RiceAndMaize     
+		   0.2,         0.2,         0.2,         0.4,          // UseIrrigation             RiceMaizeAndVegi 
+		   0.07692308,  0.3076923,   0.3846154,   0.2307692,    // UseIrrigation             Rice             
+		   0.25,        0.25,        0.25,        0.25,         // UseIrrigation             VegitAndMaize    
+		   0.25,        0.25,        0.25,        0.25,         // UseIrrigation             VegitAndRice     
+		   0.25,        0.25,        0.25,        0.25,         // UseIrrigation             Maize            
+		   0.25,        0.25,        0.25,        0.25,         // UseIrrigation             Vegitables       
+		   0.25,        0.25,        0.25,        0.25,         // Other                     RiceAndMaize     
+		   0.25,        0.25,        0.25,        0.25,         // Other                     RiceMaizeAndVegi 
+		   0.25,        0.25,        0.25,        0.25,         // Other                     Rice             
+		   0.25,        0.25,        0.25,        0.25,         // Other                     VegitAndMaize    
+		   0.25,        0.25,        0.25,        0.25,         // Other                     VegitAndRice     
+		   0.25,        0.25,        0.25,        0.25,         // Other                     Maize            
+		   0.25,        0.25,        0.25,        0.25);        // Other                     Vegitables       ;
+	numcases = 
+		                 // intensificationStrategies cropChoice       
+		  (64,           // None                      RiceAndMaize     
+		   9,            // None                      RiceMaizeAndVegi 
+		   111,          // None                      Rice             
+		   4,            // None                      VegitAndMaize    
+		   15,           // None                      VegitAndRice     
+		   7,            // None                      Maize            
+		   4,            // None                      Vegitables       
+		   19,           // CropMultipleTime          RiceAndMaize     
+		   7,            // CropMultipleTime          RiceMaizeAndVegi 
+		   6,            // CropMultipleTime          Rice             
+		   4,            // CropMultipleTime          VegitAndMaize    
+		   6,            // CropMultipleTime          VegitAndRice     
+		   6,            // CropMultipleTime          Maize            
+		   4,            // CropMultipleTime          Vegitables       
+		   13,           // ApplyFertilizer           RiceAndMaize     
+		   7,            // ApplyFertilizer           RiceMaizeAndVegi 
+		   10,           // ApplyFertilizer           Rice             
+		   5,            // ApplyFertilizer           VegitAndMaize    
+		   6,            // ApplyFertilizer           VegitAndRice     
+		   4,            // ApplyFertilizer           Maize            
+		   4,            // ApplyFertilizer           Vegitables       
+		   17,           // ApplyImprovedSee          RiceAndMaize     
+		   7,            // ApplyImprovedSee          RiceMaizeAndVegi 
+		   21,           // ApplyImprovedSee          Rice             
+		   4,            // ApplyImprovedSee          VegitAndMaize    
+		   6,            // ApplyImprovedSee          VegitAndRice     
+		   4,            // ApplyImprovedSee          Maize            
+		   4,            // ApplyImprovedSee          Vegitables       
+		   6,            // UseIrrigationAnd          RiceAndMaize     
+		   9,            // UseIrrigationAnd          RiceMaizeAndVegi 
+		   11,           // UseIrrigationAnd          Rice             
+		   4,            // UseIrrigationAnd          VegitAndMaize    
+		   9,            // UseIrrigationAnd          VegitAndRice     
+		   4,            // UseIrrigationAnd          Maize            
+		   5,            // UseIrrigationAnd          Vegitables       
+		   5,            // UseIrrigation             RiceAndMaize     
+		   5,            // UseIrrigation             RiceMaizeAndVegi 
+		   13,           // UseIrrigation             Rice             
+		   4,            // UseIrrigation             VegitAndMaize    
+		   4,            // UseIrrigation             VegitAndRice     
+		   4,            // UseIrrigation             Maize            
+		   4,            // UseIrrigation             Vegitables       
+		   4,            // Other                     RiceAndMaize     
+		   4,            // Other                     RiceMaizeAndVegi 
+		   4,            // Other                     Rice             
+		   4,            // Other                     VegitAndMaize    
+		   4,            // Other                     VegitAndRice     
+		   4,            // Other                     Maize            
+		   4);           // Other                     Vegitables       ;
+	whenchanged = 1639447767;
+	belief = (0.1882655, 0.3055327, 0.2662, 0.2400019);
+	visual V3 {
+		center = (780, 1530);
+		height = 9;
+		};
+	};
+
+node distanceToBigMarket {
+	discrete = FALSE;
+	states = (LessThan15Km, Between15And30Km, Above30Km);
+	levels = (1, 14, 24, 64);
+	kind = NATURE;
+	chance = CHANCE;
+	parents = (intensificationStrategies, ricePrice);
+	probs = 
+		// LessThan15Km Between15And30Km Above30Km  // intensificationStrategies ricePrice    
+		  (0.05405406,  0.05405406,  0.8918919,    // None                      0 to 1138    
+		   0.03636364,  0.8181818,   0.1454545,    // None                      1138 to 1230 
+		   0.5294118,   0.09803922,  0.372549,     // None                      1230 to 1250 
+		   0.7090909,   0.01818182,  0.2727273,    // None                      1250 to 1860 
+		   0.4,         0.2,         0.4,          // CropMultipleTime          0 to 1138    
+		   0.08333334,  0.4166667,   0.5,          // CropMultipleTime          1138 to 1230 
+		   0.1111111,   0.2222222,   0.6666667,    // CropMultipleTime          1230 to 1250 
+		   0.8,         0.1,         0.1,          // CropMultipleTime          1250 to 1860 
+		   0.1666667,   0.1666667,   0.6666667,    // ApplyFertilizer           0 to 1138    
+		   0.07692308,  0.7692308,   0.1538462,    // ApplyFertilizer           1138 to 1230 
+		   0.4,         0.2,         0.4,          // ApplyFertilizer           1230 to 1250 
+		   0.6666667,   0.1111111,   0.2222222,    // ApplyFertilizer           1250 to 1860 
+		   0.1666667,   0.1666667,   0.6666667,    // ApplyImprovedSee          0 to 1138    
+		   0.05263158,  0.7368421,   0.2105263,    // ApplyImprovedSee          1138 to 1230 
+		   0.4,         0.2666667,   0.3333333,    // ApplyImprovedSee          1230 to 1250 
+		   0.5714286,   0.1428571,   0.2857143,    // ApplyImprovedSee          1250 to 1860 
+		   0.25,        0.5,         0.25,         // UseIrrigationAnd          0 to 1138    
+		   0.1111111,   0.6666667,   0.2222222,    // UseIrrigationAnd          1138 to 1230 
+		   0.5333334,   0.3333333,   0.1333333,    // UseIrrigationAnd          1230 to 1250 
+		   0.5,         0.25,        0.25,         // UseIrrigationAnd          1250 to 1860 
+		   0.3333333,   0.3333333,   0.3333333,    // UseIrrigation             0 to 1138    
+		   0.1666667,   0.6666667,   0.1666667,    // UseIrrigation             1138 to 1230 
+		   0.4285714,   0.4285714,   0.1428571,    // UseIrrigation             1230 to 1250 
+		   0.2857143,   0.5714286,   0.1428571,    // UseIrrigation             1250 to 1860 
+		   0.3333333,   0.3333333,   0.3333333,    // Other                     0 to 1138    
+		   0.3333333,   0.3333333,   0.3333333,    // Other                     1138 to 1230 
+		   0.3333333,   0.3333333,   0.3333333,    // Other                     1230 to 1250 
+		   0.3333333,   0.3333333,   0.3333333);   // Other                     1250 to 1860 ;
+	numcases = 
+		                 // intensificationStrategies ricePrice    
+		  (37,           // None                      0 to 1138    
+		   55,           // None                      1138 to 1230 
+		   51,           // None                      1230 to 1250 
+		   55,           // None                      1250 to 1860 
+		   5,            // CropMultipleTime          0 to 1138    
+		   12,           // CropMultipleTime          1138 to 1230 
+		   9,            // CropMultipleTime          1230 to 1250 
+		   10,           // CropMultipleTime          1250 to 1860 
+		   6,            // ApplyFertilizer           0 to 1138    
+		   13,           // ApplyFertilizer           1138 to 1230 
+		   5,            // ApplyFertilizer           1230 to 1250 
+		   9,            // ApplyFertilizer           1250 to 1860 
+		   6,            // ApplyImprovedSee          0 to 1138    
+		   19,           // ApplyImprovedSee          1138 to 1230 
+		   15,           // ApplyImprovedSee          1230 to 1250 
+		   7,            // ApplyImprovedSee          1250 to 1860 
+		   4,            // UseIrrigationAnd          0 to 1138    
+		   9,            // UseIrrigationAnd          1138 to 1230 
+		   15,           // UseIrrigationAnd          1230 to 1250 
+		   4,            // UseIrrigationAnd          1250 to 1860 
+		   3,            // UseIrrigation             0 to 1138    
+		   6,            // UseIrrigation             1138 to 1230 
+		   7,            // UseIrrigation             1230 to 1250 
+		   7,            // UseIrrigation             1250 to 1860 
+		   3,            // Other                     0 to 1138    
+		   3,            // Other                     1138 to 1230 
+		   3,            // Other                     1230 to 1250 
+		   3);           // Other                     1250 to 1860 ;
+	title = "DistanceToBigMarket";
+	whenchanged = 1639447767;
+	belief = (0.3351959, 0.3178827, 0.3469213);
+	visual V3 {
+		center = (2748, 1530);
+		height = 14;
+		};
+	};
+
+node topgraphicWetnessIndex {
+	discrete = FALSE;
+	states = (Between14And18, Between18And23, Between23And32);
+	levels = (14.3, 17.9, 23, 32);
+	kind = NATURE;
+	chance = CHANCE;
+	parents = (intensificationStrategies, cropChoice);
+	probs = 
+		// Between14And18 Between18And23 Between23And32  // intensificationStrategies cropChoice       
+		  (0.4285714,   0.3015873,   0.2698413,    // None                      RiceAndMaize     
+		   0.5,         0.375,       0.125,        // None                      RiceMaizeAndVegi 
+		   0.2,         0.4181818,   0.3818182,    // None                      Rice             
+		   0.3333333,   0.3333333,   0.3333333,    // None                      VegitAndMaize    
+		   0.5714286,   0.2142857,   0.2142857,    // None                      VegitAndRice     
+		   0.6666667,   0.1666667,   0.1666667,    // None                      Maize            
+		   0.3333333,   0.3333333,   0.3333333,    // None                      Vegitables       
+		   0.2777778,   0.3888889,   0.3333333,    // CropMultipleTime          RiceAndMaize     
+		   0.1666667,   0.3333333,   0.5,          // CropMultipleTime          RiceMaizeAndVegi 
+		   0.4,         0.4,         0.2,          // CropMultipleTime          Rice             
+		   0.3333333,   0.3333333,   0.3333333,    // CropMultipleTime          VegitAndMaize    
+		   0.2,         0.4,         0.4,          // CropMultipleTime          VegitAndRice     
+		   0.4,         0.2,         0.4,          // CropMultipleTime          Maize            
+		   0.3333333,   0.3333333,   0.3333333,    // CropMultipleTime          Vegitables       
+		   0.5833333,   0.1666667,   0.25,         // ApplyFertilizer           RiceAndMaize     
+		   0.5,         0.3333333,   0.1666667,    // ApplyFertilizer           RiceMaizeAndVegi 
+		   0.3333333,   0.3333333,   0.3333333,    // ApplyFertilizer           Rice             
+		   0.5,         0.25,        0.25,         // ApplyFertilizer           VegitAndMaize    
+		   0.6,         0.2,         0.2,          // ApplyFertilizer           VegitAndRice     
+		   0.3333333,   0.3333333,   0.3333333,    // ApplyFertilizer           Maize            
+		   0.3333333,   0.3333333,   0.3333333,    // ApplyFertilizer           Vegitables       
+		   0.25,        0.3125,      0.4375,       // ApplyImprovedSee          RiceAndMaize     
+		   0.5,         0.3333333,   0.1666667,    // ApplyImprovedSee          RiceMaizeAndVegi 
+		   0.35,        0.25,        0.4,          // ApplyImprovedSee          Rice             
+		   0.3333333,   0.3333333,   0.3333333,    // ApplyImprovedSee          VegitAndMaize    
+		   0.4,         0.2,         0.4,          // ApplyImprovedSee          VegitAndRice     
+		   0.3333333,   0.3333333,   0.3333333,    // ApplyImprovedSee          Maize            
+		   0.3333333,   0.3333333,   0.3333333,    // ApplyImprovedSee          Vegitables       
+		   0.4,         0.2,         0.4,          // UseIrrigationAnd          RiceAndMaize     
+		   0.25,        0.375,       0.375,        // UseIrrigationAnd          RiceMaizeAndVegi 
+		   0.1,         0.4,         0.5,          // UseIrrigationAnd          Rice             
+		   0.3333333,   0.3333333,   0.3333333,    // UseIrrigationAnd          VegitAndMaize    
+		   0.5,         0.125,       0.375,        // UseIrrigationAnd          VegitAndRice     
+		   0.3333333,   0.3333333,   0.3333333,    // UseIrrigationAnd          Maize            
+		   0.5,         0.25,        0.25,         // UseIrrigationAnd          Vegitables       
+		   0.25,        0.25,        0.5,          // UseIrrigation             RiceAndMaize     
+		   0.5,         0.25,        0.25,         // UseIrrigation             RiceMaizeAndVegi 
+		   0.4166667,   0.25,        0.3333333,    // UseIrrigation             Rice             
+		   0.3333333,   0.3333333,   0.3333333,    // UseIrrigation             VegitAndMaize    
+		   0.3333333,   0.3333333,   0.3333333,    // UseIrrigation             VegitAndRice     
+		   0.3333333,   0.3333333,   0.3333333,    // UseIrrigation             Maize            
+		   0.3333333,   0.3333333,   0.3333333,    // UseIrrigation             Vegitables       
+		   0.3333333,   0.3333333,   0.3333333,    // Other                     RiceAndMaize     
+		   0.3333333,   0.3333333,   0.3333333,    // Other                     RiceMaizeAndVegi 
+		   0.3333333,   0.3333333,   0.3333333,    // Other                     Rice             
+		   0.3333333,   0.3333333,   0.3333333,    // Other                     VegitAndMaize    
+		   0.3333333,   0.3333333,   0.3333333,    // Other                     VegitAndRice     
+		   0.3333333,   0.3333333,   0.3333333,    // Other                     Maize            
+		   0.3333333,   0.3333333,   0.3333333);   // Other                     Vegitables       ;
+	numcases = 
+		                 // intensificationStrategies cropChoice       
+		  (63,           // None                      RiceAndMaize     
+		   8,            // None                      RiceMaizeAndVegi 
+		   110,          // None                      Rice             
+		   3,            // None                      VegitAndMaize    
+		   14,           // None                      VegitAndRice     
+		   6,            // None                      Maize            
+		   3,            // None                      Vegitables       
+		   18,           // CropMultipleTime          RiceAndMaize     
+		   6,            // CropMultipleTime          RiceMaizeAndVegi 
+		   5,            // CropMultipleTime          Rice             
+		   3,            // CropMultipleTime          VegitAndMaize    
+		   5,            // CropMultipleTime          VegitAndRice     
+		   5,            // CropMultipleTime          Maize            
+		   3,            // CropMultipleTime          Vegitables       
+		   12,           // ApplyFertilizer           RiceAndMaize     
+		   6,            // ApplyFertilizer           RiceMaizeAndVegi 
+		   9,            // ApplyFertilizer           Rice             
+		   4,            // ApplyFertilizer           VegitAndMaize    
+		   5,            // ApplyFertilizer           VegitAndRice     
+		   3,            // ApplyFertilizer           Maize            
+		   3,            // ApplyFertilizer           Vegitables       
+		   16,           // ApplyImprovedSee          RiceAndMaize     
+		   6,            // ApplyImprovedSee          RiceMaizeAndVegi 
+		   20,           // ApplyImprovedSee          Rice             
+		   3,            // ApplyImprovedSee          VegitAndMaize    
+		   5,            // ApplyImprovedSee          VegitAndRice     
+		   3,            // ApplyImprovedSee          Maize            
+		   3,            // ApplyImprovedSee          Vegitables       
+		   5,            // UseIrrigationAnd          RiceAndMaize     
+		   8,            // UseIrrigationAnd          RiceMaizeAndVegi 
+		   10,           // UseIrrigationAnd          Rice             
+		   3,            // UseIrrigationAnd          VegitAndMaize    
+		   8,            // UseIrrigationAnd          VegitAndRice     
+		   3,            // UseIrrigationAnd          Maize            
+		   4,            // UseIrrigationAnd          Vegitables       
+		   4,            // UseIrrigation             RiceAndMaize     
+		   4,            // UseIrrigation             RiceMaizeAndVegi 
+		   12,           // UseIrrigation             Rice             
+		   3,            // UseIrrigation             VegitAndMaize    
+		   3,            // UseIrrigation             VegitAndRice     
+		   3,            // UseIrrigation             Maize            
+		   3,            // UseIrrigation             Vegitables       
+		   3,            // Other                     RiceAndMaize     
+		   3,            // Other                     RiceMaizeAndVegi 
+		   3,            // Other                     Rice             
+		   3,            // Other                     VegitAndMaize    
+		   3,            // Other                     VegitAndRice     
+		   3,            // Other                     Maize            
+		   3);           // Other                     Vegitables       ;
+	title = "TopgraphicWetnessIndex";
+	whenchanged = 1639447767;
+	belief = (0.3358862, 0.3341285, 0.3299853);
+	visual V3 {
+		center = (780, 2184);
+		height = 12;
+		};
+	};
+
+node farmType {
+	discrete = TRUE;
+	states = (Subsistence, Diversifier, AgroPastoralist);
+	kind = NATURE;
+	chance = CHANCE;
+	parents = (intensificationStrategies, cropChoice);
+	probs = 
+		// Subsistence  Diversifier  AgroPastoralist  // intensificationStrategies cropChoice       
+		  (0.3333333,   0.4603175,   0.2063492,    // None                      RiceAndMaize     
+		   0.25,        0.5,         0.25,         // None                      RiceMaizeAndVegi 
+		   0.9272727,   0.01818182,  0.05454545,   // None                      Rice             
+		   0.3333333,   0.3333333,   0.3333333,    // None                      VegitAndMaize    
+		   0.5714286,   0.2857143,   0.1428571,    // None                      VegitAndRice     
+		   0.1666667,   0.6666667,   0.1666667,    // None                      Maize            
+		   0.3333333,   0.3333333,   0.3333333,    // None                      Vegitables       
+		   0.3333333,   0.6111111,   0.05555556,   // CropMultipleTime          RiceAndMaize     
+		   0.1666667,   0.6666667,   0.1666667,    // CropMultipleTime          RiceMaizeAndVegi 
+		   0.6,         0.2,         0.2,          // CropMultipleTime          Rice             
+		   0.3333333,   0.3333333,   0.3333333,    // CropMultipleTime          VegitAndMaize    
+		   0.4,         0.4,         0.2,          // CropMultipleTime          VegitAndRice     
+		   0.2,         0.6,         0.2,          // CropMultipleTime          Maize            
+		   0.3333333,   0.3333333,   0.3333333,    // CropMultipleTime          Vegitables       
+		   0.5833333,   0.25,        0.1666667,    // ApplyFertilizer           RiceAndMaize     
+		   0.3333333,   0.5,         0.1666667,    // ApplyFertilizer           RiceMaizeAndVegi 
+		   0.7777778,   0.1111111,   0.1111111,    // ApplyFertilizer           Rice             
+		   0.25,        0.5,         0.25,         // ApplyFertilizer           VegitAndMaize    
+		   0.4,         0.4,         0.2,          // ApplyFertilizer           VegitAndRice     
+		   0.3333333,   0.3333333,   0.3333333,    // ApplyFertilizer           Maize            
+		   0.3333333,   0.3333333,   0.3333333,    // ApplyFertilizer           Vegitables       
+		   0.4375,      0.5,         0.0625,       // ApplyImprovedSee          RiceAndMaize     
+		   0.3333333,   0.5,         0.1666667,    // ApplyImprovedSee          RiceMaizeAndVegi 
+		   0.85,        0.05,        0.1,          // ApplyImprovedSee          Rice             
+		   0.3333333,   0.3333333,   0.3333333,    // ApplyImprovedSee          VegitAndMaize    
+		   0.2,         0.6,         0.2,          // ApplyImprovedSee          VegitAndRice     
+		   0.3333333,   0.3333333,   0.3333333,    // ApplyImprovedSee          Maize            
+		   0.3333333,   0.3333333,   0.3333333,    // ApplyImprovedSee          Vegitables       
+		   0.2,         0.6,         0.2,          // UseIrrigationAnd          RiceAndMaize     
+		   0.125,       0.75,        0.125,        // UseIrrigationAnd          RiceMaizeAndVegi 
+		   0.8,         0.1,         0.1,          // UseIrrigationAnd          Rice             
+		   0.3333333,   0.3333333,   0.3333333,    // UseIrrigationAnd          VegitAndMaize    
+		   0.75,        0.125,       0.125,        // UseIrrigationAnd          VegitAndRice     
+		   0.3333333,   0.3333333,   0.3333333,    // UseIrrigationAnd          Maize            
+		   0.25,        0.5,         0.25,         // UseIrrigationAnd          Vegitables       
+		   0.25,        0.5,         0.25,         // UseIrrigation             RiceAndMaize     
+		   0.25,        0.5,         0.25,         // UseIrrigation             RiceMaizeAndVegi 
+		   0.8333333,   0.08333334,  0.08333334,   // UseIrrigation             Rice             
+		   0.3333333,   0.3333333,   0.3333333,    // UseIrrigation             VegitAndMaize    
+		   0.3333333,   0.3333333,   0.3333333,    // UseIrrigation             VegitAndRice     
+		   0.3333333,   0.3333333,   0.3333333,    // UseIrrigation             Maize            
+		   0.3333333,   0.3333333,   0.3333333,    // UseIrrigation             Vegitables       
+		   0.3333333,   0.3333333,   0.3333333,    // Other                     RiceAndMaize     
+		   0.3333333,   0.3333333,   0.3333333,    // Other                     RiceMaizeAndVegi 
+		   0.3333333,   0.3333333,   0.3333333,    // Other                     Rice             
+		   0.3333333,   0.3333333,   0.3333333,    // Other                     VegitAndMaize    
+		   0.3333333,   0.3333333,   0.3333333,    // Other                     VegitAndRice     
+		   0.3333333,   0.3333333,   0.3333333,    // Other                     Maize            
+		   0.3333333,   0.3333333,   0.3333333);   // Other                     Vegitables       ;
+	numcases = 
+		                 // intensificationStrategies cropChoice       
+		  (63,           // None                      RiceAndMaize     
+		   8,            // None                      RiceMaizeAndVegi 
+		   110,          // None                      Rice             
+		   3,            // None                      VegitAndMaize    
+		   14,           // None                      VegitAndRice     
+		   6,            // None                      Maize            
+		   3,            // None                      Vegitables       
+		   18,           // CropMultipleTime          RiceAndMaize     
+		   6,            // CropMultipleTime          RiceMaizeAndVegi 
+		   5,            // CropMultipleTime          Rice             
+		   3,            // CropMultipleTime          VegitAndMaize    
+		   5,            // CropMultipleTime          VegitAndRice     
+		   5,            // CropMultipleTime          Maize            
+		   3,            // CropMultipleTime          Vegitables       
+		   12,           // ApplyFertilizer           RiceAndMaize     
+		   6,            // ApplyFertilizer           RiceMaizeAndVegi 
+		   9,            // ApplyFertilizer           Rice             
+		   4,            // ApplyFertilizer           VegitAndMaize    
+		   5,            // ApplyFertilizer           VegitAndRice     
+		   3,            // ApplyFertilizer           Maize            
+		   3,            // ApplyFertilizer           Vegitables       
+		   16,           // ApplyImprovedSee          RiceAndMaize     
+		   6,            // ApplyImprovedSee          RiceMaizeAndVegi 
+		   20,           // ApplyImprovedSee          Rice             
+		   3,            // ApplyImprovedSee          VegitAndMaize    
+		   5,            // ApplyImprovedSee          VegitAndRice     
+		   3,            // ApplyImprovedSee          Maize            
+		   3,            // ApplyImprovedSee          Vegitables       
+		   5,            // UseIrrigationAnd          RiceAndMaize     
+		   8,            // UseIrrigationAnd          RiceMaizeAndVegi 
+		   10,           // UseIrrigationAnd          Rice             
+		   3,            // UseIrrigationAnd          VegitAndMaize    
+		   8,            // UseIrrigationAnd          VegitAndRice     
+		   3,            // UseIrrigationAnd          Maize            
+		   4,            // UseIrrigationAnd          Vegitables       
+		   4,            // UseIrrigation             RiceAndMaize     
+		   4,            // UseIrrigation             RiceMaizeAndVegi 
+		   12,           // UseIrrigation             Rice             
+		   3,            // UseIrrigation             VegitAndMaize    
+		   3,            // UseIrrigation             VegitAndRice     
+		   3,            // UseIrrigation             Maize            
+		   3,            // UseIrrigation             Vegitables       
+		   3,            // Other                     RiceAndMaize     
+		   3,            // Other                     RiceMaizeAndVegi 
+		   3,            // Other                     Rice             
+		   3,            // Other                     VegitAndMaize    
+		   3,            // Other                     VegitAndRice     
+		   3,            // Other                     Maize            
+		   3);           // Other                     Vegitables       ;
+	title = "FarmerType";
+	whenchanged = 1639447767;
+	belief = (0.5834577, 0.2718226, 0.1447197);
+	visual V3 {
+		center = (1554, 2208);
+		height = 1;
+		};
+	};
+
+node farmSize {
+	discrete = FALSE;
+	states = (LessThan_3Ha, Between_3And6Ha, Between_6And9Ha, MoreThan_9Ha);
+	levels = (0, 3, 6, 9, 21.5);
+	kind = NATURE;
+	chance = CHANCE;
+	parents = (intensificationStrategies, farmType);
+	probs = 
+		// LessThan 3Ha Between 3And6Ha Between 6And9Ha MoreThan 9Ha  // intensificationStrategies farmType        
+		  (0.8120301,   0.1654135,   0.01503759,  0.007518797,  // None                      Subsistence     
+		   0.6666667,   0.1904762,   0.0952381,   0.04761905,   // None                      Diversifier     
+		   0.04347826,  0.1304348,   0.4782609,   0.3478261,    // None                      AgroPastoralist 
+		   0.5833333,   0.25,        0.08333334,  0.08333334,   // CropMultipleTime          Subsistence     
+		   0.8,         0.1,         0.05,        0.05,         // CropMultipleTime          Diversifier     
+		   0.25,        0.25,        0.25,        0.25,         // CropMultipleTime          AgroPastoralist 
+		   0.7222222,   0.1666667,   0.05555556,  0.05555556,   // ApplyFertilizer           Subsistence     
+		   0.4,         0.3,         0.2,         0.1,          // ApplyFertilizer           Diversifier     
+		   0.2,         0.2,         0.2,         0.4,          // ApplyFertilizer           AgroPastoralist 
+		   0.6296296,   0.2222222,   0.07407407,  0.07407407,   // ApplyImprovedSee          Subsistence     
+		   0.6,         0.2666667,   0.06666667,  0.06666667,   // ApplyImprovedSee          Diversifier     
+		   0.2,         0.2,         0.2,         0.4,          // ApplyImprovedSee          AgroPastoralist 
+		   0.5625,      0.3125,      0.0625,      0.0625,       // UseIrrigationAnd          Subsistence     
+		   0.6666667,   0.08333334,  0.1666667,   0.08333334,   // UseIrrigationAnd          Diversifier     
+		   0.25,        0.25,        0.25,        0.25,         // UseIrrigationAnd          AgroPastoralist 
+		   0.6153846,   0.2307692,   0.07692308,  0.07692308,   // UseIrrigation             Subsistence     
+		   0.3333333,   0.3333333,   0.1666667,   0.1666667,    // UseIrrigation             Diversifier     
+		   0.25,        0.25,        0.25,        0.25,         // UseIrrigation             AgroPastoralist 
+		   0.25,        0.25,        0.25,        0.25,         // Other                     Subsistence     
+		   0.25,        0.25,        0.25,        0.25,         // Other                     Diversifier     
+		   0.25,        0.25,        0.25,        0.25);        // Other                     AgroPastoralist ;
+	numcases = 
+		                 // intensificationStrategies farmType        
+		  (133,          // None                      Subsistence     
+		   42,           // None                      Diversifier     
+		   23,           // None                      AgroPastoralist 
+		   12,           // CropMultipleTime          Subsistence     
+		   20,           // CropMultipleTime          Diversifier     
+		   4,            // CropMultipleTime          AgroPastoralist 
+		   18,           // ApplyFertilizer           Subsistence     
+		   10,           // ApplyFertilizer           Diversifier     
+		   5,            // ApplyFertilizer           AgroPastoralist 
+		   27,           // ApplyImprovedSee          Subsistence     
+		   15,           // ApplyImprovedSee          Diversifier     
+		   5,            // ApplyImprovedSee          AgroPastoralist 
+		   16,           // UseIrrigationAnd          Subsistence     
+		   12,           // UseIrrigationAnd          Diversifier     
+		   4,            // UseIrrigationAnd          AgroPastoralist 
+		   13,           // UseIrrigation             Subsistence     
+		   6,            // UseIrrigation             Diversifier     
+		   4,            // UseIrrigation             AgroPastoralist 
+		   4,            // Other                     Subsistence     
+		   4,            // Other                     Diversifier     
+		   4);           // Other                     AgroPastoralist ;
+	title = "SizeOfCropLand";
+	whenchanged = 1639447767;
+	belief = (0.6328123, 0.1863409, 0.09914014, 0.08170677);
+	visual V3 {
+		center = (2028, 2208);
+		height = 5;
+		};
+	};
+
+node totalLaborManDays {
+	discrete = FALSE;
+	states = (lessThan_120, Between_120And220, Between_220And400, MoreThan_400);
+	levels = (10, 120, 220, 400, 2760);
+	kind = NATURE;
+	chance = CHANCE;
+	inputs = (, farmSize);
+	parents = (intensificationStrategies, farmSize);
+	probs = 
+		// lessThan 120 Between 120And22 Between 220And40 MoreThan 400  // intensificationStrategies farmSize        
+		  (0.173913,    0.2536232,   0.2608696,   0.3115942,    // None                      LessThan 3Ha    
+		   0.4117647,   0.3823529,   0.1470588,   0.05882353,   // None                      Between 3And6Ha 
+		   0.3333333,   0.3888889,   0.1111111,   0.1666667,    // None                      Between 6And9Ha 
+		   0.6666667,   0.08333334,  0.1666667,   0.08333334,   // None                      MoreThan 9Ha    
+		   0.16,        0.2,         0.28,        0.36,         // CropMultipleTime          LessThan 3Ha    
+		   0.1428571,   0.2857143,   0.2857143,   0.2857143,    // CropMultipleTime          Between 3And6Ha 
+		   0.25,        0.25,        0.25,        0.25,         // CropMultipleTime          Between 6And9Ha 
+		   0.25,        0.25,        0.25,        0.25,         // CropMultipleTime          MoreThan 9Ha    
+		   0.05263158,  0.2631579,   0.368421,    0.3157895,    // ApplyFertilizer           LessThan 3Ha    
+		   0.25,        0.375,       0.125,       0.25,         // ApplyFertilizer           Between 3And6Ha 
+		   0.2,         0.4,         0.2,         0.2,          // ApplyFertilizer           Between 6And9Ha 
+		   0.4,         0.2,         0.2,         0.2,          // ApplyFertilizer           MoreThan 9Ha    
+		   0.1071429,   0.3571429,   0.3571429,   0.1785714,    // ApplyImprovedSee          LessThan 3Ha    
+		   0.3333333,   0.08333334,  0.25,        0.3333333,    // ApplyImprovedSee          Between 3And6Ha 
+		   0.4,         0.2,         0.2,         0.2,          // ApplyImprovedSee          Between 6And9Ha 
+		   0.5,         0.1666667,   0.1666667,   0.1666667,    // ApplyImprovedSee          MoreThan 9Ha    
+		   0.1578947,   0.2105263,   0.2105263,   0.4210526,    // UseIrrigationAnd          LessThan 3Ha    
+		   0.375,       0.25,        0.25,        0.125,        // UseIrrigationAnd          Between 3And6Ha 
+		   0.4,         0.2,         0.2,         0.2,          // UseIrrigationAnd          Between 6And9Ha 
+		   0.25,        0.25,        0.25,        0.25,         // UseIrrigationAnd          MoreThan 9Ha    
+		   0.25,        0.1666667,   0.3333333,   0.25,         // UseIrrigation             LessThan 3Ha    
+		   0.4285714,   0.2857143,   0.1428571,   0.1428571,    // UseIrrigation             Between 3And6Ha 
+		   0.25,        0.25,        0.25,        0.25,         // UseIrrigation             Between 6And9Ha 
+		   0.25,        0.25,        0.25,        0.25,         // UseIrrigation             MoreThan 9Ha    
+		   0.25,        0.25,        0.25,        0.25,         // Other                     LessThan 3Ha    
+		   0.25,        0.25,        0.25,        0.25,         // Other                     Between 3And6Ha 
+		   0.25,        0.25,        0.25,        0.25,         // Other                     Between 6And9Ha 
+		   0.25,        0.25,        0.25,        0.25);        // Other                     MoreThan 9Ha    ;
+	numcases = 
+		                 // intensificationStrategies farmSize        
+		  (138,          // None                      LessThan 3Ha    
+		   34,           // None                      Between 3And6Ha 
+		   18,           // None                      Between 6And9Ha 
+		   12,           // None                      MoreThan 9Ha    
+		   25,           // CropMultipleTime          LessThan 3Ha    
+		   7,            // CropMultipleTime          Between 3And6Ha 
+		   4,            // CropMultipleTime          Between 6And9Ha 
+		   4,            // CropMultipleTime          MoreThan 9Ha    
+		   19,           // ApplyFertilizer           LessThan 3Ha    
+		   8,            // ApplyFertilizer           Between 3And6Ha 
+		   5,            // ApplyFertilizer           Between 6And9Ha 
+		   5,            // ApplyFertilizer           MoreThan 9Ha    
+		   28,           // ApplyImprovedSee          LessThan 3Ha    
+		   12,           // ApplyImprovedSee          Between 3And6Ha 
+		   5,            // ApplyImprovedSee          Between 6And9Ha 
+		   6,            // ApplyImprovedSee          MoreThan 9Ha    
+		   19,           // UseIrrigationAnd          LessThan 3Ha    
+		   8,            // UseIrrigationAnd          Between 3And6Ha 
+		   5,            // UseIrrigationAnd          Between 6And9Ha 
+		   4,            // UseIrrigationAnd          MoreThan 9Ha    
+		   12,           // UseIrrigation             LessThan 3Ha    
+		   7,            // UseIrrigation             Between 3And6Ha 
+		   4,            // UseIrrigation             Between 6And9Ha 
+		   4,            // UseIrrigation             MoreThan 9Ha    
+		   4,            // Other                     LessThan 3Ha    
+		   4,            // Other                     Between 3And6Ha 
+		   4,            // Other                     Between 6And9Ha 
+		   4);           // Other                     MoreThan 9Ha    ;
+	title = "LabourInManDays";
+	whenchanged = 1639447767;
+	belief = (0.2414701, 0.2656561, 0.2406295, 0.2522443);
+	visual V3 {
+		center = (2760, 2208);
+		height = 6;
+		};
+	};
+
+node shareOfHiredLabour {
+	discrete = FALSE;
+	states = (LessThan_10Percent, Between_10And60Percent, Above_60Percent);
+	levels = (0, 10, 60, 100);
+	kind = NATURE;
+	chance = CHANCE;
+	parents = (intensificationStrategies, totalLaborManDays);
+	probs = 
+		// LessThan 10Perce Between 10And60P Above 60Percent  // intensificationStrategies totalLaborManDays 
+		  (0.2156863,   0.4117647,   0.372549,     // None                      lessThan 120      
+		   0.4181818,   0.3090909,   0.2727273,    // None                      Between 120And22  
+		   0.3409091,   0.4772727,   0.1818182,    // None                      Between 220And40  
+		   0.5625,      0.2291667,   0.2083333,    // None                      MoreThan 400      
+		   0.3333333,   0.3333333,   0.3333333,    // CropMultipleTime          lessThan 120      
+		   0.375,       0.375,       0.25,         // CropMultipleTime          Between 120And22  
+		   0.5,         0.2,         0.3,          // CropMultipleTime          Between 220And40  
+		   0.4166667,   0.4166667,   0.1666667,    // CropMultipleTime          MoreThan 400      
+		   0.2,         0.2,         0.6,          // ApplyFertilizer           lessThan 120      
+		   0.2,         0.6,         0.2,          // ApplyFertilizer           Between 120And22  
+		   0.3333333,   0.3333333,   0.3333333,    // ApplyFertilizer           Between 220And40  
+		   0.2222222,   0.3333333,   0.4444444,    // ApplyFertilizer           MoreThan 400      
+		   0.1818182,   0.4545455,   0.3636364,    // ApplyImprovedSee          lessThan 120      
+		   0.25,        0.4166667,   0.3333333,    // ApplyImprovedSee          Between 120And22  
+		   0.3571429,   0.3571429,   0.2857143,    // ApplyImprovedSee          Between 220And40  
+		   0.3,         0.1,         0.6,          // ApplyImprovedSee          MoreThan 400      
+		   0.125,       0.375,       0.5,          // UseIrrigationAnd          lessThan 120      
+		   0.2857143,   0.2857143,   0.4285714,    // UseIrrigationAnd          Between 120And22  
+		   0.1428571,   0.2857143,   0.5714286,    // UseIrrigationAnd          Between 220And40  
+		   0.5,         0.1,         0.4,          // UseIrrigationAnd          MoreThan 400      
+		   0.2857143,   0.1428571,   0.5714286,    // UseIrrigation             lessThan 120      
+		   0.6,         0.2,         0.2,          // UseIrrigation             Between 120And22  
+		   0.5,         0.3333333,   0.1666667,    // UseIrrigation             Between 220And40  
+		   0.4,         0.4,         0.2,          // UseIrrigation             MoreThan 400      
+		   0.3333333,   0.3333333,   0.3333333,    // Other                     lessThan 120      
+		   0.3333333,   0.3333333,   0.3333333,    // Other                     Between 120And22  
+		   0.3333333,   0.3333333,   0.3333333,    // Other                     Between 220And40  
+		   0.3333333,   0.3333333,   0.3333333);   // Other                     MoreThan 400      ;
+	numcases = 
+		                 // intensificationStrategies totalLaborManDays 
+		  (51,           // None                      lessThan 120      
+		   55,           // None                      Between 120And22  
+		   44,           // None                      Between 220And40  
+		   48,           // None                      MoreThan 400      
+		   6,            // CropMultipleTime          lessThan 120      
+		   8,            // CropMultipleTime          Between 120And22  
+		   10,           // CropMultipleTime          Between 220And40  
+		   12,           // CropMultipleTime          MoreThan 400      
+		   5,            // ApplyFertilizer           lessThan 120      
+		   10,           // ApplyFertilizer           Between 120And22  
+		   9,            // ApplyFertilizer           Between 220And40  
+		   9,            // ApplyFertilizer           MoreThan 400      
+		   11,           // ApplyImprovedSee          lessThan 120      
+		   12,           // ApplyImprovedSee          Between 120And22  
+		   14,           // ApplyImprovedSee          Between 220And40  
+		   10,           // ApplyImprovedSee          MoreThan 400      
+		   8,            // UseIrrigationAnd          lessThan 120      
+		   7,            // UseIrrigationAnd          Between 120And22  
+		   7,            // UseIrrigationAnd          Between 220And40  
+		   10,           // UseIrrigationAnd          MoreThan 400      
+		   7,            // UseIrrigation             lessThan 120      
+		   5,            // UseIrrigation             Between 120And22  
+		   6,            // UseIrrigation             Between 220And40  
+		   5,            // UseIrrigation             MoreThan 400      
+		   3,            // Other                     lessThan 120      
+		   3,            // Other                     Between 120And22  
+		   3,            // Other                     Between 220And40  
+		   3);           // Other                     MoreThan 400      ;
+	title = "ShareOfHiredLabour";
+	whenchanged = 1639447767;
+	belief = (0.3583303, 0.3421341, 0.2995356);
+	visual V3 {
+		center = (2760, 1752);
+		height = 15;
+		};
+	};
+
+node percentNonfarmIncome {
+	discrete = FALSE;
+	states = (None, LessThan30Perc, MoreThan30Perc);
+	levels = (0, 0, 30, 92);
+	kind = NATURE;
+	chance = CHANCE;
+	parents = (intensificationStrategies, maizePrice);
+	probs = 
+		// None         LessThan30Perc MoreThan30Perc  // intensificationStrategies maizePrice  
+		  (0.7090909,   0.1545455,   0.1363636,    // None                      0           
+		   0.7666667,   0.03333334,  0.2,          // None                      0 to 800    
+		   0.6666667,   0.2222222,   0.1111111,    // None                      800 to 890  
+		   0.8181818,   0.1363636,   0.04545455,   // None                      890 to 1120 
+		   0.6,         0.2,         0.2,          // CropMultipleTime          0           
+		   0.2222222,   0.5555556,   0.2222222,    // CropMultipleTime          0 to 800    
+		   0.6666667,   0.25,        0.08333334,   // CropMultipleTime          800 to 890  
+		   0.6,         0.2,         0.2,          // CropMultipleTime          890 to 1120 
+		   0.6363636,   0.2727273,   0.09090909,   // ApplyFertilizer           0           
+		   0.3,         0.3,         0.4,          // ApplyFertilizer           0 to 800    
+		   0.5714286,   0.2857143,   0.1428571,    // ApplyFertilizer           800 to 890  
+		   0.4,         0.2,         0.4,          // ApplyFertilizer           890 to 1120 
+		   0.6190476,   0.2380952,   0.1428571,    // ApplyImprovedSee          0           
+		   0.75,        0.125,       0.125,        // ApplyImprovedSee          0 to 800    
+		   0.4,         0.5,         0.1,          // ApplyImprovedSee          800 to 890  
+		   0.5,         0.375,       0.125,        // ApplyImprovedSee          890 to 1120 
+		   0.6875,      0.1875,      0.125,        // UseIrrigationAnd          0           
+		   0.3333333,   0.3333333,   0.3333333,    // UseIrrigationAnd          0 to 800    
+		   0.5,         0.25,        0.25,         // UseIrrigationAnd          800 to 890  
+		   0.6666667,   0.1666667,   0.1666667,    // UseIrrigationAnd          890 to 1120 
+		   0.8181818,   0.09090909,  0.09090909,   // UseIrrigation             0           
+		   0.6,         0.2,         0.2,          // UseIrrigation             0 to 800    
+		   0.3333333,   0.3333333,   0.3333333,    // UseIrrigation             800 to 890  
+		   0.5,         0.25,        0.25,         // UseIrrigation             890 to 1120 
+		   0.3333333,   0.3333333,   0.3333333,    // Other                     0           
+		   0.3333333,   0.3333333,   0.3333333,    // Other                     0 to 800    
+		   0.3333333,   0.3333333,   0.3333333,    // Other                     800 to 890  
+		   0.3333333,   0.3333333,   0.3333333);   // Other                     890 to 1120 ;
+	numcases = 
+		                 // intensificationStrategies maizePrice  
+		  (110,          // None                      0           
+		   30,           // None                      0 to 800    
+		   36,           // None                      800 to 890  
+		   22,           // None                      890 to 1120 
+		   5,            // CropMultipleTime          0           
+		   9,            // CropMultipleTime          0 to 800    
+		   12,           // CropMultipleTime          800 to 890  
+		   10,           // CropMultipleTime          890 to 1120 
+		   11,           // ApplyFertilizer           0           
+		   10,           // ApplyFertilizer           0 to 800    
+		   7,            // ApplyFertilizer           800 to 890  
+		   5,            // ApplyFertilizer           890 to 1120 
+		   21,           // ApplyImprovedSee          0           
+		   8,            // ApplyImprovedSee          0 to 800    
+		   10,           // ApplyImprovedSee          800 to 890  
+		   8,            // ApplyImprovedSee          890 to 1120 
+		   16,           // UseIrrigationAnd          0           
+		   6,            // UseIrrigationAnd          0 to 800    
+		   4,            // UseIrrigationAnd          800 to 890  
+		   6,            // UseIrrigationAnd          890 to 1120 
+		   11,           // UseIrrigation             0           
+		   5,            // UseIrrigation             0 to 800    
+		   3,            // UseIrrigation             800 to 890  
+		   4,            // UseIrrigation             890 to 1120 
+		   3,            // Other                     0           
+		   3,            // Other                     0 to 800    
+		   3,            // Other                     800 to 890  
+		   3);           // Other                     890 to 1120 ;
+	title = "PercentOfNonFarmIncome";
+	whenchanged = 1639447767;
+	belief = (0.6580905, 0.193509, 0.1484005);
+	visual V3 {
+		center = (840, 1038);
+		height = 11;
+		};
+	};
+
+node commercializationIndex {
+	discrete = FALSE;
+	states = (LessThan_30Percent, Between_30And60Percent, MoreThan_60Percent);
+	levels = (0, 30, 60, 100);
+	kind = NATURE;
+	chance = CHANCE;
+	parents = (intensificationStrategies, ageOfTheHouseholdHead);
+	probs = 
+		// LessThan 30Perce Between 30And60P MoreThan 60Perce  // intensificationStrategies ageOfTheHouseholdHead 
+		  (0.1212121,   0.3636364,   0.5151515,    // None                      between 24And35       
+		   0.296875,    0.328125,    0.375,        // None                      between 35and45       
+		   0.3272727,   0.3454545,   0.3272727,    // None                      between 45And55       
+		   0.4130435,   0.4565217,   0.1304348,    // None                      Above 55              
+		   0.375,       0.5,         0.125,        // CropMultipleTime          between 24And35       
+		   0.125,       0.625,       0.25,         // CropMultipleTime          between 35and45       
+		   0.3333333,   0.4444444,   0.2222222,    // CropMultipleTime          between 45And55       
+		   0.3636364,   0.3636364,   0.2727273,    // CropMultipleTime          Above 55              
+		   0.125,       0.25,        0.625,        // ApplyFertilizer           between 24And35       
+		   0.1111111,   0.4444444,   0.4444444,    // ApplyFertilizer           between 35and45       
+		   0.09090909,  0.7272727,   0.1818182,    // ApplyFertilizer           between 45And55       
+		   0.2,         0.2,         0.6,          // ApplyFertilizer           Above 55              
+		   0.25,        0.25,        0.5,          // ApplyImprovedSee          between 24And35       
+		   0.1764706,   0.5294118,   0.2941177,    // ApplyImprovedSee          between 35and45       
+		   0.25,        0.375,       0.375,        // ApplyImprovedSee          between 45And55       
+		   0.2142857,   0.5,         0.2857143,    // ApplyImprovedSee          Above 55              
+		   0.1666667,   0.3333333,   0.5,          // UseIrrigationAnd          between 24And35       
+		   0.2,         0.6,         0.2,          // UseIrrigationAnd          between 35and45       
+		   0.3,         0.2,         0.5,          // UseIrrigationAnd          between 45And55       
+		   0.3333333,   0.1666667,   0.5,          // UseIrrigationAnd          Above 55              
+		   0.3333333,   0.3333333,   0.3333333,    // UseIrrigation             between 24And35       
+		   0.3333333,   0.5,         0.1666667,    // UseIrrigation             between 35and45       
+		   0.1428571,   0.4285714,   0.4285714,    // UseIrrigation             between 45And55       
+		   0.2857143,   0.4285714,   0.2857143,    // UseIrrigation             Above 55              
+		   0.3333333,   0.3333333,   0.3333333,    // Other                     between 24And35       
+		   0.3333333,   0.3333333,   0.3333333,    // Other                     between 35and45       
+		   0.3333333,   0.3333333,   0.3333333,    // Other                     between 45And55       
+		   0.3333333,   0.3333333,   0.3333333);   // Other                     Above 55              ;
+	numcases = 
+		                 // intensificationStrategies ageOfTheHouseholdHead 
+		  (33,           // None                      between 24And35       
+		   64,           // None                      between 35and45       
+		   55,           // None                      between 45And55       
+		   46,           // None                      Above 55              
+		   8,            // CropMultipleTime          between 24And35       
+		   8,            // CropMultipleTime          between 35and45       
+		   9,            // CropMultipleTime          between 45And55       
+		   11,           // CropMultipleTime          Above 55              
+		   8,            // ApplyFertilizer           between 24And35       
+		   9,            // ApplyFertilizer           between 35and45       
+		   11,           // ApplyFertilizer           between 45And55       
+		   5,            // ApplyFertilizer           Above 55              
+		   8,            // ApplyImprovedSee          between 24And35       
+		   17,           // ApplyImprovedSee          between 35and45       
+		   8,            // ApplyImprovedSee          between 45And55       
+		   14,           // ApplyImprovedSee          Above 55              
+		   6,            // UseIrrigationAnd          between 24And35       
+		   10,           // UseIrrigationAnd          between 35and45       
+		   10,           // UseIrrigationAnd          between 45And55       
+		   6,            // UseIrrigationAnd          Above 55              
+		   3,            // UseIrrigation             between 24And35       
+		   6,            // UseIrrigation             between 35and45       
+		   7,            // UseIrrigation             between 45And55       
+		   7,            // UseIrrigation             Above 55              
+		   3,            // Other                     between 24And35       
+		   3,            // Other                     between 35and45       
+		   3,            // Other                     between 45And55       
+		   3);           // Other                     Above 55              ;
+	title = "CommercializationIndex";
+	whenchanged = 1639447767;
+	belief = (0.2739306, 0.3912294, 0.33484);
+	visual V3 {
+		center = (1134, 732);
+		height = 3;
+		link 2 {
+			path = ((709, 1442), (556, 1254), (556, 732), (917, 732));
+			};
+		};
+	};
+
+node creditaccess {
+	discrete = TRUE;
+	states = (No, Yes);
+	kind = NATURE;
+	chance = CHANCE;
+	parents = (intensificationStrategies, ageOfTheHouseholdHead);
+	probs = 
+		// No           Yes           // intensificationStrategies ageOfTheHouseholdHead 
+		  (0.6875,      0.3125,       // None                      between 24And35       
+		   0.5714286,   0.4285714,    // None                      between 35and45       
+		   0.7407407,   0.2592593,    // None                      between 45And55       
+		   0.8,         0.2,          // None                      Above 55              
+		   0.4285714,   0.5714286,    // CropMultipleTime          between 24And35       
+		   0.2857143,   0.7142857,    // CropMultipleTime          between 35and45       
+		   0.5,         0.5,          // CropMultipleTime          between 45And55       
+		   0.8,         0.2,          // CropMultipleTime          Above 55              
+		   0.4285714,   0.5714286,    // ApplyFertilizer           between 24And35       
+		   0.375,       0.625,        // ApplyFertilizer           between 35and45       
+		   0.7,         0.3,          // ApplyFertilizer           between 45And55       
+		   0.25,        0.75,         // ApplyFertilizer           Above 55              
+		   0.8571429,   0.1428571,    // ApplyImprovedSee          between 24And35       
+		   0.5,         0.5,          // ApplyImprovedSee          between 35and45       
+		   0.5714286,   0.4285714,    // ApplyImprovedSee          between 45And55       
+		   0.6923077,   0.3076923,    // ApplyImprovedSee          Above 55              
+		   0.8,         0.2,          // UseIrrigationAnd          between 24And35       
+		   0.7777778,   0.2222222,    // UseIrrigationAnd          between 35and45       
+		   0.4444444,   0.5555556,    // UseIrrigationAnd          between 45And55       
+		   0.6,         0.4,          // UseIrrigationAnd          Above 55              
+		   0.5,         0.5,          // UseIrrigation             between 24And35       
+		   0.8,         0.2,          // UseIrrigation             between 35and45       
+		   0.5,         0.5,          // UseIrrigation             between 45And55       
+		   0.8333333,   0.1666667,    // UseIrrigation             Above 55              
+		   0.5,         0.5,          // Other                     between 24And35       
+		   0.5,         0.5,          // Other                     between 35and45       
+		   0.5,         0.5,          // Other                     between 45And55       
+		   0.5,         0.5);         // Other                     Above 55              ;
+	numcases = 
+		                 // intensificationStrategies ageOfTheHouseholdHead 
+		  (32,           // None                      between 24And35       
+		   63,           // None                      between 35and45       
+		   54,           // None                      between 45And55       
+		   45,           // None                      Above 55              
+		   7,            // CropMultipleTime          between 24And35       
+		   7,            // CropMultipleTime          between 35and45       
+		   8,            // CropMultipleTime          between 45And55       
+		   10,           // CropMultipleTime          Above 55              
+		   7,            // ApplyFertilizer           between 24And35       
+		   8,            // ApplyFertilizer           between 35and45       
+		   10,           // ApplyFertilizer           between 45And55       
+		   4,            // ApplyFertilizer           Above 55              
+		   7,            // ApplyImprovedSee          between 24And35       
+		   16,           // ApplyImprovedSee          between 35and45       
+		   7,            // ApplyImprovedSee          between 45And55       
+		   13,           // ApplyImprovedSee          Above 55              
+		   5,            // UseIrrigationAnd          between 24And35       
+		   9,            // UseIrrigationAnd          between 35and45       
+		   9,            // UseIrrigationAnd          between 45And55       
+		   5,            // UseIrrigationAnd          Above 55              
+		   2,            // UseIrrigation             between 24And35       
+		   5,            // UseIrrigation             between 35and45       
+		   6,            // UseIrrigation             between 45And55       
+		   6,            // UseIrrigation             Above 55              
+		   2,            // Other                     between 24And35       
+		   2,            // Other                     between 35and45       
+		   2,            // Other                     between 45And55       
+		   2);           // Other                     Above 55              ;
+	whenchanged = 1639447767;
+	belief = (0.6499935, 0.3500065);
+	visual V3 {
+		center = (1164, 1416);
+		height = 8;
+		};
+	};
+
+node perCapitaIncome {
+	discrete = FALSE;
+	levels = (0, 160000, 280000, 600000, 15800000);
+	kind = NATURE;
+	chance = CHANCE;
+	parents = (intensificationStrategies, totalLaborManDays);
+	probs = 
+		// 0 to 1.6e5   1.6e5 to 2.8e5 2.8e5 to 6e5 6e5 to 1.58e7  // intensificationStrategies totalLaborManDays 
+		  (0.2115385,   0.1538462,   0.3076923,   0.3269231,    // None                      lessThan 120      
+		   0.3392857,   0.2678571,   0.2857143,   0.1071429,    // None                      Between 120And22  
+		   0.3333333,   0.2666667,   0.1777778,   0.2222222,    // None                      Between 220And40  
+		   0.3333333,   0.3541667,   0.1666667,   0.1458333,    // None                      MoreThan 400      
+		   0.1428571,   0.1428571,   0.5714286,   0.1428571,    // CropMultipleTime          lessThan 120      
+		   0.2222222,   0.1111111,   0.3333333,   0.3333333,    // CropMultipleTime          Between 120And22  
+		   0.4545455,   0.1818182,   0.2727273,   0.09090909,   // CropMultipleTime          Between 220And40  
+		   0.08333334,  0.3333333,   0.25,        0.3333333,    // CropMultipleTime          MoreThan 400      
+		   0.1666667,   0.1666667,   0.3333333,   0.3333333,    // ApplyFertilizer           lessThan 120      
+		   0.09090909,  0.2727273,   0.1818182,   0.4545455,    // ApplyFertilizer           Between 120And22  
+		   0.3,         0.2,         0.3,         0.2,          // ApplyFertilizer           Between 220And40  
+		   0.3,         0.1,         0.3,         0.3,          // ApplyFertilizer           MoreThan 400      
+		   0.1666667,   0.25,        0.25,        0.3333333,    // ApplyImprovedSee          lessThan 120      
+		   0.2307692,   0.3076923,   0.2307692,   0.2307692,    // ApplyImprovedSee          Between 120And22  
+		   0.06666667,  0.2,         0.4,         0.3333333,    // ApplyImprovedSee          Between 220And40  
+		   0.09090909,  0.2727273,   0.2727273,   0.3636364,    // ApplyImprovedSee          MoreThan 400      
+		   0.1111111,   0.2222222,   0.2222222,   0.4444444,    // UseIrrigationAnd          lessThan 120      
+		   0.125,       0.25,        0.125,       0.5,          // UseIrrigationAnd          Between 120And22  
+		   0.375,       0.125,       0.25,        0.25,         // UseIrrigationAnd          Between 220And40  
+		   0.1818182,   0.4545455,   0.1818182,   0.1818182,    // UseIrrigationAnd          MoreThan 400      
+		   0.25,        0.25,        0.25,        0.25,         // UseIrrigation             lessThan 120      
+		   0.3333333,   0.1666667,   0.1666667,   0.3333333,    // UseIrrigation             Between 120And22  
+		   0.2857143,   0.2857143,   0.1428571,   0.2857143,    // UseIrrigation             Between 220And40  
+		   0.1666667,   0.1666667,   0.5,         0.1666667,    // UseIrrigation             MoreThan 400      
+		   0.25,        0.25,        0.25,        0.25,         // Other                     lessThan 120      
+		   0.25,        0.25,        0.25,        0.25,         // Other                     Between 120And22  
+		   0.25,        0.25,        0.25,        0.25,         // Other                     Between 220And40  
+		   0.25,        0.25,        0.25,        0.25);        // Other                     MoreThan 400      ;
+	numcases = 
+		                 // intensificationStrategies totalLaborManDays 
+		  (52,           // None                      lessThan 120      
+		   56,           // None                      Between 120And22  
+		   45,           // None                      Between 220And40  
+		   48,           // None                      MoreThan 400      
+		   7,            // CropMultipleTime          lessThan 120      
+		   9,            // CropMultipleTime          Between 120And22  
+		   11,           // CropMultipleTime          Between 220And40  
+		   12,           // CropMultipleTime          MoreThan 400      
+		   6,            // ApplyFertilizer           lessThan 120      
+		   11,           // ApplyFertilizer           Between 120And22  
+		   10,           // ApplyFertilizer           Between 220And40  
+		   10,           // ApplyFertilizer           MoreThan 400      
+		   12,           // ApplyImprovedSee          lessThan 120      
+		   13,           // ApplyImprovedSee          Between 120And22  
+		   15,           // ApplyImprovedSee          Between 220And40  
+		   11,           // ApplyImprovedSee          MoreThan 400      
+		   9,            // UseIrrigationAnd          lessThan 120      
+		   8,            // UseIrrigationAnd          Between 120And22  
+		   8,            // UseIrrigationAnd          Between 220And40  
+		   11,           // UseIrrigationAnd          MoreThan 400      
+		   8,            // UseIrrigation             lessThan 120      
+		   6,            // UseIrrigation             Between 120And22  
+		   7,            // UseIrrigation             Between 220And40  
+		   6,            // UseIrrigation             MoreThan 400      
+		   4,            // Other                     lessThan 120      
+		   4,            // Other                     Between 120And22  
+		   4,            // Other                     Between 220And40  
+		   4);           // Other                     MoreThan 400      ;
+	whenchanged = 1639447767;
+	belief = (0.2618947, 0.2493382, 0.2527437, 0.2360233);
+	visual V3 {
+		center = (1608, 760);
+		height = 16;
+		link 2 {
+			path = ((2953, 2208), (3336, 2208), (3336, 556), (3332, 524), (1612, 524), (1609, 679));
+			};
+		};
+	};
+NodeSet farmersdecisions {Nodes = (intensificationStrategies, cropChoice);};
+NodeSet TargetNode {Nodes = (intensificationStrategies);};
+ElimOrder = (creditaccess, householdSize, distanceToBigMarket, shareOfHiredLabour, percentNonfarmIncome, commercializationIndex, ricePrice, perCapitaIncome, totalLaborManDays, farmSize, topgraphicWetnessIndex, farmType, maizePrice, intensificationStrategies, cropChoice, ageOfTheHouseholdHead);
+};
